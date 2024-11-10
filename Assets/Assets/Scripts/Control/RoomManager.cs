@@ -2,35 +2,58 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
     public GameObject player;
-    public Transform spanwPoint;
+    public GameObject player2;
+    public Transform spawnPoint;
+    public GameObject canvas;
+
+    CreateAndJoin CreateAndJoin;
     void Start()
     {
+        CreateAndJoin = GetComponent<CreateAndJoin>();
         PhotonNetwork.ConnectUsingSettings();
+        canvas.SetActive(true);
     }
 
-    public override void OnConnectedToMaster()
-    {
-        base.OnConnectedToMaster();
+    //public override void OnConnectedToMaster()
+    //{
+    //    base.OnConnectedToMaster();
 
-        PhotonNetwork.JoinLobby();
-    }
+    //    PhotonNetwork.JoinLobby();
+    //}
 
-    public override void OnJoinedLobby()
-    {
-        base.OnJoinedLobby();
+    //public override void OnJoinedLobby()
+    //{
+    //    base.OnJoinedLobby();
 
-        PhotonNetwork.JoinOrCreateRoom("Game",null,null);
-    }
+    //    PhotonNetwork.JoinOrCreateRoom(null,new RoomOptions() {MaxPlayers = 2},TypedLobby.Default);
+    //}
 
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
 
-        GameObject _player = PhotonNetwork.Instantiate(player.name,spanwPoint.position,Quaternion.identity);
+        Debug.Log("2");
 
+        //GameObject selectedPlayerPrefab;
+
+        //if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+        //{
+        //    // First player to join
+        //    selectedPlayerPrefab = player;
+        //}
+        //else
+        //{
+        //    // Second player or more
+        //    selectedPlayerPrefab = player2;
+        //}
+
+        PhotonNetwork.Instantiate(player.name, spawnPoint.position, Quaternion.identity);
+
+        canvas.SetActive(false);
     }
 }
