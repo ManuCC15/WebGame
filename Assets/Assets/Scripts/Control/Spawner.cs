@@ -23,7 +23,7 @@ public class Spawner : MonoBehaviourPunCallbacks
             player = player2;
         }
 
-        PhotonNetwork.Instantiate(player.name,new Vector3((Random.Range(-5.5f,5.5f)),1.5f,0f),Quaternion.identity);
-        
+        GameObject _player = PhotonNetwork.Instantiate(player.name,new Vector3((Random.Range(-5.5f,5.5f)),1.5f,0f),Quaternion.identity);
+        _player.GetComponent<PlayerSetup>().IsLocalPLayer();
     }
 }
