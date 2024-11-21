@@ -237,6 +237,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6238609034817333009, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6748043192224767954, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
       propertyPath: resourceType
       value: Iron
@@ -6463,6 +6467,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6128392919417313016, guid: 4891e28cd1cce3c47a1d94bdb01a6922, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7547690927144633869}
+    - targetCorrespondingSourceObject: {fileID: 6128392919417313016, guid: 4891e28cd1cce3c47a1d94bdb01a6922, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7547690927144633870}
   m_SourcePrefab: {fileID: 100100000, guid: 4891e28cd1cce3c47a1d94bdb01a6922, type: 3}
 --- !u!1 &7547690927144633867 stripped
 GameObject:
@@ -6537,6 +6544,28 @@ MonoBehaviour:
   requiredAmount2: 2
   craftedPrefab: {fileID: 6128392919417313016, guid: 4891e28cd1cce3c47a1d94bdb01a6922, type: 3}
   spawnLocation: {fileID: 8267121283300177194}
+--- !u!114 &7547690927144633870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7547690927144633867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 3
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1001 &8155407979701616520
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6588,6 +6617,10 @@ PrefabInstance:
     - target: {fileID: 5888996426631406284, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6238609034817333009, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
+      propertyPath: sceneViewId
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6748043192224767954, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
       propertyPath: resourceType

@@ -1,7 +1,8 @@
+using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryManager : MonoBehaviour
+public class InventoryManager : MonoBehaviour, IPunObservable
 {
     public static InventoryManager Instance;
 
@@ -30,6 +31,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    // Agrega los recursos del jugador en la sincronización
     public void AddResource(string resourceName, int amount)
     {
         Resource resource = resources.Find(r => r.name == resourceName);
@@ -78,6 +80,34 @@ public class InventoryManager : MonoBehaviour
         Resource resource = resources.Find(r => r.name == resourceName);
         return resource != null ? resource.quantity : 0;
     }
+
+    // Implementación de sincronización de datos con Photon
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            // Enviar los datos de los recursos a la red
+            foreach (var resource in resources)
+            {
+                stream.SendNext(resource.quantity);
+            }
+        }
+        else
+        {
+            // Recibir los datos de los recursos desde la red
+            for (int i = 0; i < resources.Count; i++)
+            {
+                resources[i].quantity = (int)stream.ReceiveNext();
+            }
+
+            // Disparar el evento para actualizar la UI después de la sincronización
+            foreach (var resource in resources)
+            {
+                ResourceUpdated?.Invoke(resource.name, resource.quantity);
+            }
+        }
+    }
 }
+
 
 

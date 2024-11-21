@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 
 public class InteractableObject : MonoBehaviour
@@ -19,6 +20,13 @@ public class InteractableObject : MonoBehaviour
     public Transform spawnLocation; // Lugar donde se generará el prefab
 
     private bool isPlayerGathering;
+
+    private PhotonView photonView;
+
+    private void Start()
+    {
+        photonView = GetComponent<PhotonView>();
+    }
 
     // Inicio de recolección
     public void StartGathering()
@@ -46,7 +54,8 @@ public class InteractableObject : MonoBehaviour
     }
 
     // Craftear un objeto
-    public void CraftItem()
+    [Photon.Pun.PunRPC]
+    public void CraftItemRPC()
     {
         if (isCraftingStation && InventoryManager.Instance.HasEnoughResource(requiredResource1, requiredAmount1)
             && InventoryManager.Instance.HasEnoughResource(requiredResource2, requiredAmount2))
@@ -60,6 +69,19 @@ public class InteractableObject : MonoBehaviour
             }
         }
     }
+
+    public void CraftItem()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            CraftItemRPC();  // Llamada RPC en el cliente master
+        }
+        else
+        {
+            photonView.RPC("CraftItemRPC", RpcTarget.MasterClient);  // Llamada RPC en otros clientes
+        }
+    }
+
 
     // Generar un prefab
     public void SpawnPrefab()
