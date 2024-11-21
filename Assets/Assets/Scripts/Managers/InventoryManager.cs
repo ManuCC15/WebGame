@@ -1,8 +1,10 @@
 using Photon.Pun;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryManager : MonoBehaviour, IPunObservable
+public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance;
 
@@ -19,7 +21,7 @@ public class InventoryManager : MonoBehaviour, IPunObservable
     public delegate void OnResourceUpdated(string resourceName, int newQuantity);
     public event OnResourceUpdated ResourceUpdated;
 
-    private PhotonView photonView;
+    private const byte UpdateResourceEventCode = 1; // Código para sincronizar los recursos
 
     void Awake()
     {
@@ -31,40 +33,78 @@ public class InventoryManager : MonoBehaviour, IPunObservable
         {
             Destroy(gameObject);
         }
+    }
 
-        photonView = GetComponent<PhotonView>();  // Obtener PhotonView
+    void OnEnable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += OnEventReceived;
+    }
+
+    void OnDisable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEventReceived;
+    }
+
+    private void OnEventReceived(EventData photonEvent)
+    {
+        if (photonEvent.Code == UpdateResourceEventCode)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+            string resourceName = (string)data[0];
+            int newQuantity = (int)data[1];
+
+            Resource resource = resources.Find(r => r.name == resourceName);
+            if (resource != null)
+            {
+                resource.quantity = newQuantity;
+
+                // Notificar a la UI
+                ResourceUpdated?.Invoke(resourceName, resource.quantity);
+            }
+        }
+    }
+
+    private void SyncResourceUpdate(string resourceName, int newQuantity)
+    {
+        object[] content = new object[] { resourceName, newQuantity };
+
+        RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        SendOptions sendOptions = new SendOptions { Reliability = true };
+
+        PhotonNetwork.RaiseEvent(UpdateResourceEventCode, content, options, sendOptions);
     }
 
     public void AddResource(string resourceName, int amount)
     {
-        if (!photonView.IsMine) return; // Solo el dueño del PhotonView puede modificar sus recursos
-
         Resource resource = resources.Find(r => r.name == resourceName);
 
         if (resource != null)
         {
             int newQuantity = Mathf.Clamp(resource.quantity + amount, 0, resource.maxQuantity);
-            int addedAmount = newQuantity - resource.quantity;
             resource.quantity = newQuantity;
 
-            // Notificar cambios si es necesario
-            if (addedAmount > 0 && ResourceUpdated != null)
-            {
-                ResourceUpdated.Invoke(resourceName, resource.quantity);
-            }
+            // Notificar cambios a la UI
+            ResourceUpdated?.Invoke(resourceName, resource.quantity);
+
+            // Sincronizar con todos los jugadores
+            SyncResourceUpdate(resourceName, newQuantity);
         }
     }
 
     public void ConsumeResource(string resourceName, int amount)
     {
-        //if (!photonView.IsMine) return; // Solo el dueño del PhotonView puede consumir recursos
-
         Resource resource = resources.Find(r => r.name == resourceName);
 
         if (resource != null && resource.quantity >= amount)
         {
-            resource.quantity -= amount;
+            int newQuantity = resource.quantity - amount;
+            resource.quantity = newQuantity;
+
+            // Notificar cambios a la UI
             ResourceUpdated?.Invoke(resourceName, resource.quantity);
+
+            // Sincronizar con todos los jugadores
+            SyncResourceUpdate(resourceName, newQuantity);
         }
     }
 
@@ -79,34 +119,8 @@ public class InventoryManager : MonoBehaviour, IPunObservable
         Resource resource = resources.Find(r => r.name == resourceName);
         return resource != null ? resource.quantity : 0;
     }
-
-    // Sincronización de recursos entre jugadores
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            // Enviar los recursos al otro jugador
-            foreach (var resource in resources)
-            {
-                stream.SendNext(resource.quantity);
-            }
-        }
-        else
-        {
-            // Recibir los recursos del otro jugador
-            for (int i = 0; i < resources.Count; i++)
-            {
-                resources[i].quantity = (int)stream.ReceiveNext();
-            }
-
-            // Notificar a la UI para actualizar
-            foreach (var resource in resources)
-            {
-                ResourceUpdated?.Invoke(resource.name, resource.quantity);
-            }
-        }
-    }
 }
+
 
 
 
