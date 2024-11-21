@@ -32,4 +32,31 @@ public class RoomList : MonoBehaviourPunCallbacks
             
         }
     }
+    public void RefreshRoomList()
+    {
+        Debug.Log("Solicitando actualización manual de la lista de salas...");
+        PhotonNetwork.GetCustomRoomList(TypedLobby.Default, "");
+    }
+
+    private void Start()
+    {
+        if (PhotonNetwork.IsConnectedAndReady)
+        {
+            PhotonNetwork.JoinLobby(); // Asegúrate de estar en un lobby
+            Debug.Log("Unido al lobby...");
+        }
+        else
+        {
+            Debug.LogWarning("No conectado a Photon. Conéctate antes de unirte al lobby.");
+        }
+    }
+
+    // Método para testear el botón de refresco manual
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            RefreshRoomList(); // Presiona R para forzar actualización manual
+        }
+    }
 }
