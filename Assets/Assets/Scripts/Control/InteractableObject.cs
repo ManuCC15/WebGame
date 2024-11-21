@@ -1,34 +1,28 @@
+using ExitGames.Client.Photon;
 using Photon.Pun;
+using Photon.Realtime; // Para Photon Realtime
 using UnityEngine;
 
 public class InteractableObject : MonoBehaviour
 {
-    public bool isResourceNode; // Define si es un nodo de recursos
-    public string resourceType; // Tipo de recurso
-    public int resourceAmountPerCycle = 1; // Recursos por ciclo
-    public float gatherInterval = 5f; // Intervalo de recolección
+    public bool isResourceNode;
+    public string resourceType;
+    public int resourceAmountPerCycle = 1;
+    public float gatherInterval = 5f;
 
-    public bool isCraftingStation; // Define si es una estación de crafting
+    public bool isCraftingStation;
     public string requiredResource1;
     public int requiredAmount1;
     public string requiredResource2;
     public int requiredAmount2;
     public GameObject craftedPrefab;
 
-    //public bool isPrefabSpawner; // Define si es un spawner de prefabs
-    //public GameObject prefabToSpawn; // Prefab que debe generarse
-    public Transform spawnLocation; // Lugar donde se generará el prefab
+    public Transform spawnLocation;
 
     private bool isPlayerGathering;
+    private byte resourceGatherEventCode = 1; // Código de evento personalizado
 
-    private PhotonView photonView;
-
-    private void Start()
-    {
-        photonView = GetComponent<PhotonView>();
-    }
-
-    // Inicio de recolección
+    // Iniciar recolección
     public void StartGathering()
     {
         if (isResourceNode)
@@ -50,12 +44,27 @@ public class InteractableObject : MonoBehaviour
 
     void GatherResource()
     {
+        // Recolectar el recurso localmente
         InventoryManager.Instance.AddResource(resourceType, resourceAmountPerCycle);
+
+        // Notificar a los demás jugadores sobre la recolección
+        RaiseGatherResourceEvent();
     }
 
-    // Craftear un objeto
-    [Photon.Pun.PunRPC]
-    public void CraftItemRPC()
+    void RaiseGatherResourceEvent()
+    {
+        // Los datos del evento (tipo de recurso y cantidad)
+        object[] content = new object[] { resourceType, resourceAmountPerCycle };
+
+        // RaiseEvent con Photon Realtime
+        RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All }; // Enviar a todos los jugadores
+        SendOptions sendOptions = new SendOptions { Reliability = true }; // Garantiza que el mensaje se reciba
+
+        PhotonNetwork.RaiseEvent(resourceGatherEventCode, content, options, sendOptions);
+    }
+
+    // Craftear el objeto
+    public void CraftItem()
     {
         if (isCraftingStation && InventoryManager.Instance.HasEnoughResource(requiredResource1, requiredAmount1)
             && InventoryManager.Instance.HasEnoughResource(requiredResource2, requiredAmount2))
@@ -70,23 +79,34 @@ public class InteractableObject : MonoBehaviour
         }
     }
 
-    public void CraftItem()
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            CraftItemRPC();  // Llamada RPC en el cliente master
-        }
-        else
-        {
-            photonView.RPC("CraftItemRPC", RpcTarget.MasterClient);  // Llamada RPC en otros clientes
-        }
-    }
-
-
-    // Generar un prefab
+    // Generar prefab para todos los jugadores
     public void SpawnPrefab()
     {
-        Instantiate(craftedPrefab, spawnLocation.position, spawnLocation.rotation);
+        // Instanciar prefab para todos los jugadores
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GameObject spawnedObject = Instantiate(craftedPrefab, spawnLocation.position, spawnLocation.rotation);
+
+            // Obtener el PhotonView del objeto instanciado
+            PhotonView photonView = spawnedObject.GetComponent<PhotonView>();
+
+            // Llamar a un RPC para que todos los jugadores vean el objeto crafteado
+            photonView.RPC("OnPrefabCrafted", RpcTarget.All, spawnedObject.transform.position, spawnedObject.transform.rotation);
+        }
+    }
+
+    // RPC para notificar a todos los jugadores sobre la creación del prefab
+    [PunRPC]
+    void OnPrefabCrafted(Vector3 position, Quaternion rotation)
+    {
+        // Instanciar el prefab en la posición y rotación especificada por el master
+        if (craftedPrefab != null)
+        {
+            Instantiate(craftedPrefab, position, rotation);
+        }
     }
 }
+
+
+
 
