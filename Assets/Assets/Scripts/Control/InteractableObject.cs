@@ -14,8 +14,8 @@ public class InteractableObject : MonoBehaviour
     public int requiredAmount2;
     public GameObject craftedPrefab;
 
-    public bool isPrefabSpawner; // Define si es un spawner de prefabs
-    public GameObject prefabToSpawn; // Prefab que debe generarse
+    //public bool isPrefabSpawner; // Define si es un spawner de prefabs
+    //public GameObject prefabToSpawn; // Prefab que debe generarse
     public Transform spawnLocation; // Lugar donde se generará el prefab
 
     private bool isPlayerGathering;
@@ -56,7 +56,7 @@ public class InteractableObject : MonoBehaviour
 
             if (craftedPrefab != null)
             {
-                Instantiate(craftedPrefab, transform.position, Quaternion.identity);
+                SpawnPrefab();
             }
         }
     }
@@ -64,10 +64,7 @@ public class InteractableObject : MonoBehaviour
     // Generar un prefab
     public void SpawnPrefab()
     {
-        if (isPrefabSpawner && prefabToSpawn != null)
-        {
-            Instantiate(prefabToSpawn, spawnLocation.position, spawnLocation.rotation);
-        }
+        Instantiate(craftedPrefab, spawnLocation.position, spawnLocation.rotation);
     }
 }
 

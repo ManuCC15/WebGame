@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 5f; // Velocidad de movimiento
     public Transform movePoint; // Punto de referencia para el movimiento
     public LayerMask interactableLayer; // Capa de objetos interactuables
+    public LayerMask obstacles; // muros
 
     private PhotonView photonView;
     private InteractableObject currentInteractable; // Objeto interactuable actual
@@ -30,15 +31,21 @@ public class PlayerController : MonoBehaviour
     {
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
 
-        if (Vector3.Distance(transform.position, movePoint.position) <= 0.05f)
+        if (Vector3.Distance(transform.position, movePoint.position) <= .05f)
         {
             if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f)
             {
-                movePoint.position += new Vector3(Input.GetAxisRaw("Horizontal"), 0f, 0f);
+                if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(Input.GetAxisRaw("Horizontal"), 0f, 0f), .2f, obstacles))
+                {
+                    movePoint.position += new Vector3(Input.GetAxisRaw("Horizontal"), 0f, 0f);
+                }
             }
             else if (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1f)
             {
-                movePoint.position += new Vector3(0f, Input.GetAxisRaw("Vertical"), 0f);
+                if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, Input.GetAxisRaw("Vertical"), 0f), .2f, obstacles))
+                {
+                    movePoint.position += new Vector3(0f, Input.GetAxisRaw("Vertical"), 0f);
+                }
             }
         }
     }
@@ -66,11 +73,11 @@ public class PlayerController : MonoBehaviour
                         // Genera un prefab desde una estación de crafting
                         currentInteractable.CraftItem();
                     }
-                    else if (currentInteractable.isPrefabSpawner)
-                    {
-                        // Genera un prefab desde un spawner específico
-                        currentInteractable.SpawnPrefab();
-                    }
+                    //else if (currentInteractable.isPrefabSpawner)
+                    //{
+                    //    // Genera un prefab desde un spawner específico
+                    //    currentInteractable.SpawnPrefab();
+                    //}
                 }
             }
         }

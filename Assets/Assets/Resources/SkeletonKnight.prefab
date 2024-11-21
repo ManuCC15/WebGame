@@ -141,6 +141,9 @@ MonoBehaviour:
   interactableLayer:
     serializedVersion: 2
     m_Bits: 512
+  obstacles:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!95 &4419249050958458890
 Animator:
   serializedVersion: 5
