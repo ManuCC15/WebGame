@@ -1,6 +1,6 @@
 using ExitGames.Client.Photon;
 using Photon.Pun;
-using Photon.Realtime; // Para Photon Realtime
+using Photon.Realtime;
 using UnityEngine;
 
 public class InteractableObject : MonoBehaviour
@@ -21,6 +21,12 @@ public class InteractableObject : MonoBehaviour
 
     private bool isPlayerGathering;
     private byte resourceGatherEventCode = 1; // Código de evento personalizado
+    private PhotonView photonView;
+
+    void Awake()
+    {
+        photonView = GetComponent<PhotonView>();
+    }
 
     // Iniciar recolección
     public void StartGathering()
@@ -72,37 +78,40 @@ public class InteractableObject : MonoBehaviour
             InventoryManager.Instance.ConsumeResource(requiredResource1, requiredAmount1);
             InventoryManager.Instance.ConsumeResource(requiredResource2, requiredAmount2);
 
-            if (craftedPrefab != null)
-            {
-                SpawnPrefab();
-            }
+            // Instanciar el prefab y sincronizar con los demás jugadores
+            photonView.RPC("CraftAndSpawnPrefab", RpcTarget.All);
         }
     }
 
-    // Generar prefab para todos los jugadores
-    public void SpawnPrefab()
+    // RPC para craftear y generar el objeto para todos los jugadores
+    [PunRPC]
+    void CraftAndSpawnPrefab()
     {
-        // Instanciar el prefab para todos los jugadores
-        GameObject spawnedObject = Instantiate(craftedPrefab, spawnLocation.position, spawnLocation.rotation);
+        if (craftedPrefab != null)
+        {
+            // Generar el prefab en todos los clientes
+            GameObject spawnedObject = Instantiate(craftedPrefab, spawnLocation.position, spawnLocation.rotation);
 
-        // Obtener el PhotonView del objeto instanciado
-        PhotonView photonView = spawnedObject.GetComponent<PhotonView>();
+            // Obtener el PhotonView del objeto instanciado
+            PhotonView spawnedObjectPhotonView = spawnedObject.GetComponent<PhotonView>();
 
-        // Llamar a un RPC para que todos los jugadores vean el objeto crafteado
-        photonView.RPC("OnPrefabCrafted", RpcTarget.All, spawnedObject.transform.position, spawnedObject.transform.rotation);
+            // Asegurar que todos los jugadores vean el objeto instanciado
+            spawnedObjectPhotonView.RPC("OnPrefabCrafted", RpcTarget.All, spawnedObject.transform.position, spawnedObject.transform.rotation);
+        }
     }
 
     // RPC para notificar a todos los jugadores sobre la creación del prefab
     [PunRPC]
     void OnPrefabCrafted(Vector3 position, Quaternion rotation)
     {
-        // Instanciar el prefab en la posición y rotación especificada
+        // Instanciar el prefab en la posición y rotación especificada por el master
         if (craftedPrefab != null)
         {
             Instantiate(craftedPrefab, position, rotation);
         }
     }
 }
+
 
 
 

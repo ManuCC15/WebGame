@@ -241,6 +241,10 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6238609034817333009, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
+      propertyPath: OwnershipTransfer
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6748043192224767954, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
       propertyPath: resourceType
       value: Iron
@@ -321,7 +325,7 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents: []
   sceneViewId: 5
@@ -4420,7 +4424,7 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents:
   - {fileID: 1095391735}
@@ -6611,7 +6615,7 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents: []
   sceneViewId: 3
@@ -6672,6 +6676,10 @@ PrefabInstance:
     - target: {fileID: 6238609034817333009, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
       propertyPath: sceneViewId
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6238609034817333009, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
+      propertyPath: OwnershipTransfer
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6748043192224767954, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
       propertyPath: resourceType

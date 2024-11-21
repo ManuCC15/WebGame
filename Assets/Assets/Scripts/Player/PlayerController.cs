@@ -22,8 +22,8 @@ public class PlayerController : MonoBehaviour
         if (photonView.IsMine)
         {
             HandleMovement(); // Gestión del movimiento
-            HandleInteraction(); // Gestión de interacción
         }
+        HandleInteraction(); // Gestión de interacción
     }
 
     // Controla el movimiento en una grilla
