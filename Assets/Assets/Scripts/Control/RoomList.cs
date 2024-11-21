@@ -18,6 +18,8 @@ public class RoomList : MonoBehaviourPunCallbacks
             }
         }
 
+        AllRoom = new GameObject[roomList.Count];
+
         for (int i = 0; i < roomList.Count; i++)
         {
             if (roomList[i].IsOpen && roomList[i].IsVisible && roomList[i].PlayerCount >= 1) 
