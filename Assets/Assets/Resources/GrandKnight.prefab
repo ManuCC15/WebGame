@@ -247,6 +247,14 @@ MonoBehaviour:
   obstacles:
     serializedVersion: 2
     m_Bits: 256
+<<<<<<< Updated upstream
+=======
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  prefabToSpawn: {fileID: 6128392919417313016, guid: fd5daf3d7e555fe46a0f127e2f249ede, type: 3}
+  spawnOfPrefab: {fileID: 3216858581041411655, guid: 738b88a9efc125e439525d95069decef, type: 3}
+>>>>>>> Stashed changes
 --- !u!95 &4010605677470281949
 Animator:
   serializedVersion: 5
