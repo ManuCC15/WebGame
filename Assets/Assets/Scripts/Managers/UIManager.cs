@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
 
 public class UIManager : MonoBehaviour
 {
@@ -25,9 +25,10 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
+        // Suscribir al evento de actualización de recursos
         InventoryManager.Instance.ResourceUpdated += UpdateResourceUI;
 
-        // Limpia la UI antes de generar nuevos elementos
+        // Inicializar la UI
         ClearResourceUI();
 
         foreach (var resource in InventoryManager.Instance.resources)
@@ -40,21 +41,18 @@ public class UIManager : MonoBehaviour
     {
         if (!resourceUIElements.ContainsKey(resourceName)) // Evitar duplicados
         {
-            // Instanciar el prefab sin asignar el padre directamente
             TextMeshProUGUI resourceText = Instantiate(resourceUITextPrefab);
-
-            // Asignar el padre explícitamente después de instanciar
             resourceText.transform.SetParent(resourceUIParent, false);
 
-            // Configurar el texto inicial
+            // Asignar el texto inicial
             resourceText.text = $"{resourceName}: {initialQuantity}";
 
-            // Agregar al diccionario para control futuro
+            // Guardar el UI del recurso
             resourceUIElements.Add(resourceName, resourceText);
         }
     }
 
-
+    // Actualizar la UI cuando cambian los recursos
     void UpdateResourceUI(string resourceName, int newQuantity)
     {
         if (resourceUIElements.TryGetValue(resourceName, out TextMeshProUGUI resourceText))
@@ -76,5 +74,6 @@ public class UIManager : MonoBehaviour
         resourceUIElements.Clear();
     }
 }
+
 
 

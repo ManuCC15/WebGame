@@ -19,6 +19,8 @@ public class InventoryManager : MonoBehaviour, IPunObservable
     public delegate void OnResourceUpdated(string resourceName, int newQuantity);
     public event OnResourceUpdated ResourceUpdated;
 
+    private PhotonView photonView;
+
     void Awake()
     {
         if (Instance == null)
@@ -29,11 +31,14 @@ public class InventoryManager : MonoBehaviour, IPunObservable
         {
             Destroy(gameObject);
         }
+
+        photonView = GetComponent<PhotonView>();  // Obtener PhotonView
     }
 
-    // Agrega los recursos del jugador en la sincronización
     public void AddResource(string resourceName, int amount)
     {
+        if (!photonView.IsMine) return; // Solo el dueño del PhotonView puede modificar sus recursos
+
         Resource resource = resources.Find(r => r.name == resourceName);
 
         if (resource != null)
@@ -42,6 +47,7 @@ public class InventoryManager : MonoBehaviour, IPunObservable
             int addedAmount = newQuantity - resource.quantity;
             resource.quantity = newQuantity;
 
+            // Notificar cambios si es necesario
             if (addedAmount > 0 && ResourceUpdated != null)
             {
                 ResourceUpdated.Invoke(resourceName, resource.quantity);
@@ -51,6 +57,8 @@ public class InventoryManager : MonoBehaviour, IPunObservable
 
     public void ConsumeResource(string resourceName, int amount)
     {
+        if (!photonView.IsMine) return; // Solo el dueño del PhotonView puede consumir recursos
+
         Resource resource = resources.Find(r => r.name == resourceName);
 
         if (resource != null && resource.quantity >= amount)
@@ -66,27 +74,18 @@ public class InventoryManager : MonoBehaviour, IPunObservable
         return resource != null && resource.quantity >= requiredAmount;
     }
 
-    public void SellResource(string resourceName, int amount, int goldValuePerUnit)
-    {
-        if (HasEnoughResource(resourceName, amount))
-        {
-            ConsumeResource(resourceName, amount);
-            AddResource("Oro", amount * goldValuePerUnit);
-        }
-    }
-
     public int GetResourceQuantity(string resourceName)
     {
         Resource resource = resources.Find(r => r.name == resourceName);
         return resource != null ? resource.quantity : 0;
     }
 
-    // Implementación de sincronización de datos con Photon
+    // Sincronización de recursos entre jugadores
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
         {
-            // Enviar los datos de los recursos a la red
+            // Enviar los recursos al otro jugador
             foreach (var resource in resources)
             {
                 stream.SendNext(resource.quantity);
@@ -94,13 +93,13 @@ public class InventoryManager : MonoBehaviour, IPunObservable
         }
         else
         {
-            // Recibir los datos de los recursos desde la red
+            // Recibir los recursos del otro jugador
             for (int i = 0; i < resources.Count; i++)
             {
                 resources[i].quantity = (int)stream.ReceiveNext();
             }
 
-            // Disparar el evento para actualizar la UI después de la sincronización
+            // Notificar a la UI para actualizar
             foreach (var resource in resources)
             {
                 ResourceUpdated?.Invoke(resource.name, resource.quantity);
@@ -108,6 +107,7 @@ public class InventoryManager : MonoBehaviour, IPunObservable
         }
     }
 }
+
 
 
 
