@@ -57,7 +57,7 @@ public class InventoryManager : MonoBehaviour, IPunObservable
 
     public void ConsumeResource(string resourceName, int amount)
     {
-        if (!photonView.IsMine) return; // Solo el dueño del PhotonView puede consumir recursos
+        //if (!photonView.IsMine) return; // Solo el dueño del PhotonView puede consumir recursos
 
         Resource resource = resources.Find(r => r.name == resourceName);
 
