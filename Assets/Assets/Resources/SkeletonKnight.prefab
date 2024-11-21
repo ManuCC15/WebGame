@@ -138,14 +138,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   movePoint: {fileID: 7772738496194426694}
-  obstacles:
-    serializedVersion: 2
-    m_Bits: 256
   interactableLayer:
     serializedVersion: 2
     m_Bits: 512
-  prefabToSpawn: {fileID: 6128392919417313016, guid: 4891e28cd1cce3c47a1d94bdb01a6922, type: 3}
-  spawnOfPrefab: {fileID: 3216858581041411655, guid: e1d957ff479687b4f9e22dc4d16e709a, type: 3}
 --- !u!95 &4419249050958458890
 Animator:
   serializedVersion: 5

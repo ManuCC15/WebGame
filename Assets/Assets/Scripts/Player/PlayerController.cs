@@ -1,89 +1,93 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 5f; // Velocidad de transición entre grillas
-    public Transform movePoint; // Punto de referencia para moverse en la grilla
+    public float moveSpeed = 5f; // Velocidad de movimiento
+    public Transform movePoint; // Punto de referencia para el movimiento
+    public LayerMask interactableLayer; // Capa de objetos interactuables
 
-    public LayerMask obstacles; // Layer de obstáculos en tilemap
-    public LayerMask interactableLayer; // Layer de objetos interactuables
-
-    public GameObject prefabToSpawn; // Prefab a spawnear
-    public GameObject spawnOfPrefab; // Prefab a spawnear
-
-    private PhotonView photonView; // Referencia al PhotonView
+    private PhotonView photonView;
+    private InteractableObject currentInteractable; // Objeto interactuable actual
 
     void Start()
     {
-        movePoint.parent = null; // Empieza encima del player y luego lo usamos para desplazarnos
-        photonView = GetComponent<PhotonView>(); // Obtener el PhotonView
+        movePoint.parent = null; // Independiza el punto de movimiento del jugador
+        photonView = GetComponent<PhotonView>();
     }
 
     void Update()
     {
         if (photonView.IsMine)
         {
-            // Movimiento
-            transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
-
-            if (Vector3.Distance(transform.position, movePoint.position) <= .05f)
-            {
-                if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f)
-                {
-                    if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(Input.GetAxisRaw("Horizontal"), 0f, 0f), .2f, obstacles))
-                    {
-                        movePoint.position += new Vector3(Input.GetAxisRaw("Horizontal"), 0f, 0f);
-                    }
-                }
-                else if (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1f)
-                {
-                    if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, Input.GetAxisRaw("Vertical"), 0f), .2f, obstacles))
-                    {
-                        movePoint.position += new Vector3(0f, Input.GetAxisRaw("Vertical"), 0f);
-                    }
-                }
-            }
-
-            // Interacción
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                Debug.Log("xd");
-
-                Interactuar();
-            }
+            HandleMovement(); // Gestión del movimiento
+            HandleInteraction(); // Gestión de interacción
         }
     }
 
-    void Interactuar()
+    // Controla el movimiento en una grilla
+    void HandleMovement()
     {
-        // Detectar objetos interactuables cercanos
-        Collider2D interactable = Physics2D.OverlapCircle(transform.position, 1f, interactableLayer);
+        transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
 
-        if (interactable != null)
+        if (Vector3.Distance(transform.position, movePoint.position) <= 0.05f)
         {
-            // Lógica de interacción (spawnear prefab)
-            Debug.Log("pase pa");
-
-            photonView.RPC("SpawnPrefab", RpcTarget.All, spawnOfPrefab.transform.position);
-
+            if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f)
+            {
+                movePoint.position += new Vector3(Input.GetAxisRaw("Horizontal"), 0f, 0f);
+            }
+            else if (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1f)
+            {
+                movePoint.position += new Vector3(0f, Input.GetAxisRaw("Vertical"), 0f);
+            }
         }
     }
 
-    [PunRPC]
-    void SpawnPrefab(Vector3 spawnPosition)
+    // Controla las interacciones con objetos
+    void HandleInteraction()
     {
-        // Instanciar el prefab en todos los clientes
-        Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity);
-        Debug.Log("siuuu");
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Collider2D interactable = Physics2D.OverlapCircle(transform.position, 1f, interactableLayer);
 
+            if (interactable != null)
+            {
+                currentInteractable = interactable.GetComponent<InteractableObject>();
+
+                if (currentInteractable != null)
+                {
+                    if (currentInteractable.isResourceNode)
+                    {
+                        // Inicia la recolección de recursos
+                        currentInteractable.StartGathering();
+                    }
+                    else if (currentInteractable.isCraftingStation)
+                    {
+                        // Genera un prefab desde una estación de crafting
+                        currentInteractable.CraftItem();
+                    }
+                    else if (currentInteractable.isPrefabSpawner)
+                    {
+                        // Genera un prefab desde un spawner específico
+                        currentInteractable.SpawnPrefab();
+                    }
+                }
+            }
+        }
+
+        if (Input.GetKeyUp(KeyCode.E) && currentInteractable != null)
+        {
+            if (currentInteractable.isResourceNode)
+            {
+                currentInteractable.StopGathering();
+            }
+            currentInteractable = null;
+        }
     }
 
-    private void OnDrawGizmosSelected()
+private void OnDrawGizmosSelected()
     {
-        // Visualizar el radio de interacción en el editor
+        // Visualizar el radio de interacción
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, 1f);
     }
