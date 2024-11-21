@@ -82,30 +82,29 @@ public class InteractableObject : MonoBehaviour
     // Generar prefab para todos los jugadores
     public void SpawnPrefab()
     {
-        // Instanciar prefab para todos los jugadores
-        if (PhotonNetwork.IsMasterClient)
-        {
-            GameObject spawnedObject = Instantiate(craftedPrefab, spawnLocation.position, spawnLocation.rotation);
+        // Instanciar el prefab para todos los jugadores
+        GameObject spawnedObject = Instantiate(craftedPrefab, spawnLocation.position, spawnLocation.rotation);
 
-            // Obtener el PhotonView del objeto instanciado
-            PhotonView photonView = spawnedObject.GetComponent<PhotonView>();
+        // Obtener el PhotonView del objeto instanciado
+        PhotonView photonView = spawnedObject.GetComponent<PhotonView>();
 
-            // Llamar a un RPC para que todos los jugadores vean el objeto crafteado
-            photonView.RPC("OnPrefabCrafted", RpcTarget.All, spawnedObject.transform.position, spawnedObject.transform.rotation);
-        }
+        // Llamar a un RPC para que todos los jugadores vean el objeto crafteado
+        photonView.RPC("OnPrefabCrafted", RpcTarget.All, spawnedObject.transform.position, spawnedObject.transform.rotation);
     }
 
     // RPC para notificar a todos los jugadores sobre la creación del prefab
     [PunRPC]
     void OnPrefabCrafted(Vector3 position, Quaternion rotation)
     {
-        // Instanciar el prefab en la posición y rotación especificada por el master
+        // Instanciar el prefab en la posición y rotación especificada
         if (craftedPrefab != null)
         {
             Instantiate(craftedPrefab, position, rotation);
         }
     }
 }
+
+
 
 
 
