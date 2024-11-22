@@ -32,7 +32,13 @@ public class Soldier : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Castle"))
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            Debug.Log("colsione");
+        }
+
+        if (collision.gameObject.CompareTag("Castle2"))
+        {
+            //Destroy(gameObject);
             Debug.Log("colsione");
         }
     }

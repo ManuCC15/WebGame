@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Bullet
   - Castle
+  - Castle2
+  - Soldier
   layers:
   - Default
   - TransparentFX
