@@ -4572,10 +4572,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 409fce7db1b2f8a4c8f2c887cb061d08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player1: {fileID: 7022090256766554188, guid: d9ca1a47d476a5544b7e649ed1b8e235, type: 3}
-  player2: {fileID: 6278171898124595324, guid: ac9817cf6caee0e4783a7b567ddc9cce, type: 3}
-  spawnPoint1: {fileID: 768799793}
-  spawnPoint2: {fileID: 84814248}
+  playerPrefabTeam1: {fileID: 7022090256766554188, guid: d9ca1a47d476a5544b7e649ed1b8e235, type: 3}
+  playerPrefabTeam2: {fileID: 6278171898124595324, guid: ac9817cf6caee0e4783a7b567ddc9cce, type: 3}
+  spawnPointsTeam1:
+  - {fileID: 1999212161}
+  - {fileID: 2064272537}
+  spawnPointsTeam2:
+  - {fileID: 84814250}
+  - {fileID: 976101899}
 --- !u!4 &768799795
 Transform:
   m_ObjectHideFlags: 0
