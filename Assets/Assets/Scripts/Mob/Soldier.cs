@@ -30,9 +30,10 @@ public class Soldier : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("CastleDoor"))
+        if (collision.gameObject.CompareTag("Castle"))
         {
-            Destroy(this);
+            Destroy(gameObject);
+            Debug.Log("colsione");
         }
     }
 }
