@@ -242,6 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04b0325fde35cbf4491bd59b13d24cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  team: 2
   moveSpeed: 5
   movePoint: {fileID: 3910182117161566934}
   obstacles:

@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
+//Se asigna a un equipo (basado en su número de jugador en la red).
+//Se le asigna un prefab y un punto de spawn.
+//Se instancia en el mundo multijugador.
+//Se realiza la configuración necesaria para el jugador local.
 public class Spawner : MonoBehaviourPunCallbacks
 {
     public GameObject player1;
