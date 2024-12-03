@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
+using Photon.Pun;
 
 public class UIManager : MonoBehaviour
 {
@@ -27,15 +28,29 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
+        string team = GetPlayerTeam(); // Obtiene el equipo del jugador
+
+        // Si el jugador es del equipo A, muestra la UI del equipo A y oculta la del equipo B
+        if (team == "A")
+        {
+            resourceUIParentTeamA.gameObject.SetActive(true);
+            resourceUIParentTeamB.gameObject.SetActive(false);
+            InitializeTeamResources("A", InventoryManager.Instance.GetResourcesForTeam("A"));
+        }
+        // Si el jugador es del equipo B, muestra la UI del equipo B y oculta la del equipo A
+        else if (team == "B")
+        {
+            resourceUIParentTeamA.gameObject.SetActive(false);
+            resourceUIParentTeamB.gameObject.SetActive(true);
+            InitializeTeamResources("B", InventoryManager.Instance.GetResourcesForTeam("B"));
+        }
+        else
+        {
+            Debug.LogWarning("Equipo del jugador no identificado.");
+        }
+
         // Suscribirse al evento de actualización de recursos
         InventoryManager.Instance.ResourceUpdated += UpdateResourceUI;
-
-        // Inicializar la UI
-        ClearResourceUI();
-
-        // Inicializar los recursos de ambos equipos
-        InitializeTeamResources("A", InventoryManager.Instance.GetResourcesForTeam("A"));
-        InitializeTeamResources("B", InventoryManager.Instance.GetResourcesForTeam("B"));
     }
 
     void InitializeTeamResources(string team, List<InventoryManager.Resource> resources)
@@ -107,7 +122,18 @@ public class UIManager : MonoBehaviour
         }
         resourceUIElementsTeamB.Clear();
     }
+
+    private string GetPlayerTeam()
+    {
+        // Obtén el equipo del jugador desde las propiedades personalizadas de Photon
+        if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("Team", out object team))
+        {
+            return team as string;
+        }
+        return null;
+    }
 }
+
 
 
 
