@@ -11,13 +11,13 @@ public class Spawner : MonoBehaviourPunCallbacks
     public Transform[] spawnPointsTeam1; // Puntos de spawn para el equipo 1
     public Transform[] spawnPointsTeam2; // Puntos de spawn para el equipo 2
 
-    private void Start()
+ private void Start()
+{
+    if (PhotonNetwork.IsMasterClient) // Solo el Master Client instancia los jugadores
     {
-        if (PhotonNetwork.IsMasterClient) // Solo el Master Client instancia los jugadores
-        {
-            SpawnPlayer();
-        }
+        SpawnPlayer();
     }
+}
 
     private void SpawnPlayer()
     {
@@ -29,8 +29,23 @@ public class Spawner : MonoBehaviourPunCallbacks
         Transform spawnPoint = team == "A" ? GetRandomSpawnPoint(spawnPointsTeam1) : GetRandomSpawnPoint(spawnPointsTeam2);
 
         // Instanciar al jugador en la red
-        PhotonNetwork.Instantiate(playerPrefab.name, spawnPoint.position, spawnPoint.rotation);
+        GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, spawnPoint.position, spawnPoint.rotation);
+
+        // Verificar si este jugador es el local y configurar su cámara y controles
+        PlayerSetup playerSetup = player.GetComponent<PlayerSetup>();
+        if (playerSetup != null)
+        {
+            if (player.GetComponent<PhotonView>().IsMine) // Solo para el jugador local
+            {
+                playerSetup.IsLocalPlayer();
+            }
+            else
+            {
+                playerSetup.DisableNonLocalPlayer();
+            }
+        }
     }
+
 
     private Transform GetRandomSpawnPoint(Transform[] spawnPoints)
     {
