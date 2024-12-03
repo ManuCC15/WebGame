@@ -13,7 +13,10 @@ public class Spawner : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        SpawnPlayer();
+        if (PhotonNetwork.IsMasterClient) // Solo el Master Client instancia los jugadores
+        {
+            SpawnPlayer();
+        }
     }
 
     private void SpawnPlayer()
@@ -26,10 +29,7 @@ public class Spawner : MonoBehaviourPunCallbacks
         Transform spawnPoint = team == "A" ? GetRandomSpawnPoint(spawnPointsTeam1) : GetRandomSpawnPoint(spawnPointsTeam2);
 
         // Instanciar al jugador en la red
-        GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, spawnPoint.position, spawnPoint.rotation);
-
-        // Configurar al jugador local
-        player.GetComponent<PlayerSetup>().IsLocalPLayer();
+        PhotonNetwork.Instantiate(playerPrefab.name, spawnPoint.position, spawnPoint.rotation);
     }
 
     private Transform GetRandomSpawnPoint(Transform[] spawnPoints)
