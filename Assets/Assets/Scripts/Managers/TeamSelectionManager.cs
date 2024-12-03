@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine.UI;
 
 public class TeamSelectionManager : MonoBehaviourPunCallbacks
@@ -13,38 +14,39 @@ public class TeamSelectionManager : MonoBehaviourPunCallbacks
     public TextMeshProUGUI teamBStatusText;
 
     private const int MaxPlayersPerTeam = 2;
-    private int teamACount = 0;
-    private int teamBCount = 0;
     private string playerTeam;
 
     void Start()
     {
-        // Asegúrate de que todos los objetos de la UI estén asignados
+        // Verificar que todos los botones estén asignados
         if (teamAButton == null || teamBButton == null || startGameButton == null)
         {
             Debug.LogError("Uno o más botones no están asignados en el Inspector.");
-            return; // Detenemos la ejecución del Start si falta alguna asignación
+            return;
         }
+
+        // Configurar botones
+        teamAButton.onClick.AddListener(JoinTeamA);
+        teamBButton.onClick.AddListener(JoinTeamB);
+        startGameButton.onClick.AddListener(StartGame);
+
         UpdateUI();
         startGameButton.interactable = false;
-        startGameButton.onClick.AddListener(StartGame);
     }
 
     public void JoinTeamA()
     {
-        Debug.Log("Intentando unirse al Equipo A");
-
         if (PhotonNetwork.LocalPlayer != null)
         {
-            if (teamACount < MaxPlayersPerTeam && string.IsNullOrEmpty(playerTeam))
+            if (IsTeamJoinable("A"))
             {
                 playerTeam = "A";
                 PhotonNetwork.LocalPlayer.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "Team", "A" } });
-                photonView.RPC("UpdateTeamCount", RpcTarget.All, "A", 1);
+                UpdateTeamInRoomProperties("A", 1);
             }
             else
             {
-                Debug.LogWarning("Equipo A ya lleno o el jugador ya pertenece a un equipo.");
+                Debug.LogWarning("No se puede unir al Equipo A (lleno o ya en un equipo).");
             }
         }
         else
@@ -55,42 +57,97 @@ public class TeamSelectionManager : MonoBehaviourPunCallbacks
 
     public void JoinTeamB()
     {
-        if (teamBCount < MaxPlayersPerTeam && string.IsNullOrEmpty(playerTeam))
+        if (PhotonNetwork.LocalPlayer != null)
         {
-            playerTeam = "B";
-            PhotonNetwork.LocalPlayer.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "Team", "B" } });
-            photonView.RPC("UpdateTeamCount", RpcTarget.All, "B", 1);
+            if (IsTeamJoinable("B"))
+            {
+                playerTeam = "B";
+                PhotonNetwork.LocalPlayer.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "Team", "B" } });
+                UpdateTeamInRoomProperties("B", 1);
+            }
+            else
+            {
+                Debug.LogWarning("No se puede unir al Equipo B (lleno o ya en un equipo).");
+            }
+        }
+        else
+        {
+            Debug.LogError("LocalPlayer no está inicializado.");
         }
     }
 
-    [PunRPC]
-    public void UpdateTeamCount(string team, int change)
+    private bool IsTeamJoinable(string team)
     {
-        if (team == "A") teamACount += change;
-        if (team == "B") teamBCount += change;
-        UpdateUI();
+        ExitGames.Client.Photon.Hashtable roomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
+        int teamCount = (int)roomProperties[$"Team{team}Count"];
+        return teamCount < MaxPlayersPerTeam && string.IsNullOrEmpty(playerTeam);
+    }
 
-        startGameButton.interactable = teamACount > 0 && teamBCount > 0 && PhotonNetwork.IsMasterClient;
+    private void UpdateTeamInRoomProperties(string team, int change)
+    {
+        if (PhotonNetwork.CurrentRoom != null)
+        {
+            ExitGames.Client.Photon.Hashtable roomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
+
+            string propertyKey = $"Team{team}Count";
+            int currentCount = (int)roomProperties[propertyKey];
+            roomProperties[propertyKey] = Mathf.Clamp(currentCount + change, 0, MaxPlayersPerTeam);
+
+            PhotonNetwork.CurrentRoom.SetCustomProperties(roomProperties);
+        }
+    }
+
+    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable updatedProperties)
+    {
+        UpdateUI();
     }
 
     void UpdateUI()
     {
-        teamAStatusText.text = $"Team A: {teamACount}/{MaxPlayersPerTeam}";
-        teamBStatusText.text = $"Team B: {teamBCount}/{MaxPlayersPerTeam}";
+        if (PhotonNetwork.CurrentRoom != null)
+        {
+            ExitGames.Client.Photon.Hashtable roomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
 
-        teamAButton.interactable = teamACount < MaxPlayersPerTeam && string.IsNullOrEmpty(playerTeam);
-        teamBButton.interactable = teamBCount < MaxPlayersPerTeam && string.IsNullOrEmpty(playerTeam);
+            int teamACount = (int)roomProperties["TeamACount"];
+            int teamBCount = (int)roomProperties["TeamBCount"];
+
+            teamAStatusText.text = $"Team A: {teamACount}/{MaxPlayersPerTeam}";
+            teamBStatusText.text = $"Team B: {teamBCount}/{MaxPlayersPerTeam}";
+
+            teamAButton.interactable = teamACount < MaxPlayersPerTeam && string.IsNullOrEmpty(playerTeam);
+            teamBButton.interactable = teamBCount < MaxPlayersPerTeam && string.IsNullOrEmpty(playerTeam);
+
+            startGameButton.interactable = teamACount > 0 && teamBCount > 0 && PhotonNetwork.IsMasterClient;
+        }
     }
 
     public void StartGame()
     {
-        photonView.RPC("LoadGameScene", RpcTarget.All);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            photonView.RPC("LoadGameScene", RpcTarget.All);
+        }
     }
 
     [PunRPC]
     public void LoadGameScene()
     {
-        PhotonNetwork.LoadLevel("Game");  
+        PhotonNetwork.LoadLevel("Game");
+    }
+
+    public override void OnJoinedRoom()
+    {
+        // Configurar las propiedades iniciales de la sala al unirse
+        if (PhotonNetwork.IsMasterClient)
+        {
+            ExitGames.Client.Photon.Hashtable roomProperties = new ExitGames.Client.Photon.Hashtable
+            {
+                { "TeamACount", 0 },
+                { "TeamBCount", 0 }
+            };
+            PhotonNetwork.CurrentRoom.SetCustomProperties(roomProperties);
+        }
     }
 }
+
 
