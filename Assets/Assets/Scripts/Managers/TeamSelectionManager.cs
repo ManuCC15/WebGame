@@ -84,7 +84,13 @@ public class TeamSelectionManager : MonoBehaviourPunCallbacks
 
     public void StartGame()
     {
-        PhotonNetwork.LoadLevel("Game");
+        photonView.RPC("LoadGameScene", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void LoadGameScene()
+    {
+        PhotonNetwork.LoadLevel("Game");  
     }
 }
 

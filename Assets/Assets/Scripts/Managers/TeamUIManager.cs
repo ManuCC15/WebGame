@@ -135,9 +135,9 @@ public class TeamUIManager : MonoBehaviourPunCallbacks
     }
 
     // Método que se llama cuando se inicia el juego.
-    void StartGame()
-    {
-        PhotonNetwork.LoadLevel("Game");
-    }
+    //void StartGame()
+    //{
+    //    PhotonNetwork.LoadLevel("Game");
+    //}
 }
 
