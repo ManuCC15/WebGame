@@ -30,7 +30,7 @@ public class TeamSelectionManager : MonoBehaviourPunCallbacks
         teamBButton.onClick.AddListener(JoinTeamB);
         startGameButton.onClick.AddListener(StartGame);
 
-        
+        UpdateUI();
         startGameButton.interactable = false;
     }
 
@@ -78,17 +78,9 @@ public class TeamSelectionManager : MonoBehaviourPunCallbacks
 
     private bool IsTeamJoinable(string team)
     {
-        if (PhotonNetwork.CurrentRoom != null)
-        {
-            ExitGames.Client.Photon.Hashtable roomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
-
-            if (roomProperties.ContainsKey($"Team{team}Count"))
-            {
-                int teamCount = (int)roomProperties[$"Team{team}Count"];
-                return teamCount < MaxPlayersPerTeam && string.IsNullOrEmpty(playerTeam);
-            }
-        }
-        return false;
+        ExitGames.Client.Photon.Hashtable roomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
+        int teamCount = (int)roomProperties[$"Team{team}Count"];
+        return teamCount < MaxPlayersPerTeam && string.IsNullOrEmpty(playerTeam);
     }
 
     private void UpdateTeamInRoomProperties(string team, int change)
@@ -116,8 +108,8 @@ public class TeamSelectionManager : MonoBehaviourPunCallbacks
         {
             ExitGames.Client.Photon.Hashtable roomProperties = PhotonNetwork.CurrentRoom.CustomProperties;
 
-            int teamACount = roomProperties.ContainsKey("TeamACount") ? (int)roomProperties["TeamACount"] : 0;
-            int teamBCount = roomProperties.ContainsKey("TeamBCount") ? (int)roomProperties["TeamBCount"] : 0;
+            int teamACount = (int)roomProperties["TeamACount"];
+            int teamBCount = (int)roomProperties["TeamBCount"];
 
             teamAStatusText.text = $"Team A: {teamACount}/{MaxPlayersPerTeam}";
             teamBStatusText.text = $"Team B: {teamBCount}/{MaxPlayersPerTeam}";
@@ -127,12 +119,7 @@ public class TeamSelectionManager : MonoBehaviourPunCallbacks
 
             startGameButton.interactable = teamACount > 0 && teamBCount > 0 && PhotonNetwork.IsMasterClient;
         }
-        else
-        {
-            Debug.LogWarning("PhotonNetwork.CurrentRoom es null. No se puede actualizar la UI.");
-        }
     }
-
 
     public void StartGame()
     {
@@ -160,7 +147,6 @@ public class TeamSelectionManager : MonoBehaviourPunCallbacks
             };
             PhotonNetwork.CurrentRoom.SetCustomProperties(roomProperties);
         }
-        UpdateUI();
     }
 }
 
