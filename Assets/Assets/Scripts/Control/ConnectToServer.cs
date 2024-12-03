@@ -7,11 +7,20 @@ using UnityEngine.SceneManagement;
 public class ConnectToServer : MonoBehaviourPunCallbacks
 {
     public string sceneName;
-    
+
     void Start()
     {
-
-        PhotonNetwork.ConnectUsingSettings();
+        // Verifica si ya está conectado a Photon
+        if (PhotonNetwork.IsConnected)
+        {
+            Debug.Log("Ya conectado a Photon. Intentando unirse al lobby...");
+            PhotonNetwork.JoinLobby();
+        }
+        else
+        {
+            Debug.Log("Conectándose a Photon...");
+            PhotonNetwork.ConnectUsingSettings();
+        }
     }
 
     public override void OnConnectedToMaster()

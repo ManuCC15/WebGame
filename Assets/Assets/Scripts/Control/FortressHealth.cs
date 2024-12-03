@@ -7,6 +7,9 @@ public class FortressHealth : MonoBehaviourPunCallbacks
     public int maxHealth = 100;
     private int currentHealth;
 
+    public GameObject canvas;
+    public TextMeshProUGUI canvasMensage;
+
     public TextMeshProUGUI teamHealthUI; // Referencia al texto en la UI para la vida
     public string teamTag; // Etiqueta que indica el equipo de la fortaleza (ejemplo: "TeamA" o "TeamB")
 
@@ -15,6 +18,8 @@ public class FortressHealth : MonoBehaviourPunCallbacks
         // Inicializar la vida
         currentHealth = maxHealth;
         UpdateHealthUI();
+
+        canvas.SetActive(false);
     }
 
     // Función para perder vida
@@ -47,6 +52,8 @@ public class FortressHealth : MonoBehaviourPunCallbacks
     {
         Debug.Log($"{teamTag} Fortress has been destroyed!");
         // Aquí puedes añadir lógica adicional, como terminar el juego o notificar a los jugadores.
+        canvas.SetActive(true);
+        canvasMensage.text = $"{teamTag} has win the game";
     }
 
     // Llamar a la función de daño sincronizada
