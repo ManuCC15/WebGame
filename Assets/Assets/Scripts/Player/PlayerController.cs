@@ -76,11 +76,11 @@ public class PlayerController : MonoBehaviour
                         // Genera un prefab desde una estación de crafting
                         currentInteractable.CraftItem();
                     }
-                    //else if (currentInteractable.isPrefabSpawner)
-                    //{
-                    //    // Genera un prefab desde un spawner específico
-                    //    currentInteractable.SpawnPrefab();
-                    //}
+                    else if (currentInteractable.isCraftingSoldier)
+                    {
+                        // Genera un prefab desde un spawner específico
+                        currentInteractable.StoreSoldier();
+                    }
                 }
             }
         }

@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class InteractableObject : MonoBehaviour
@@ -9,11 +10,13 @@ public class InteractableObject : MonoBehaviour
     public float gatherInterval = 5f;
 
     public bool isCraftingStation;
+    public bool isCraftingSoldier;
     public string requiredResource1;
     public int requiredAmount1;
     public string requiredResource2;
     public int requiredAmount2;
     public GameObject craftedPrefab;
+    public GameObject soldierPrefab;
 
     public Transform spawnLocation;
 
@@ -91,6 +94,25 @@ public class InteractableObject : MonoBehaviour
             return team as string;
         }
         return null;
+    }
+
+    public void StoreSoldier()
+    {
+        string team = GetPlayerTeam(); // Obtén el equipo del jugador
+        if (!string.IsNullOrEmpty(team) &&
+            InventoryManager.Instance.HasEnoughResource(requiredResource1, team, requiredAmount1) &&
+            InventoryManager.Instance.HasEnoughResource(requiredResource2, team, requiredAmount2))
+        {
+            InventoryManager.Instance.ConsumeResource(requiredResource1, team, requiredAmount1);
+            InventoryManager.Instance.ConsumeResource(requiredResource2, team, requiredAmount2);
+
+            // Almacenar el soldado en el InventoryManager
+            InventoryManager.Instance.StoreSoldier(team, soldierPrefab);
+        }
+        else
+        {
+            Debug.LogWarning("No hay suficientes recursos para almacenar un soldado.");
+        }
     }
 }
 

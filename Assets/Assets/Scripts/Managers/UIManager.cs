@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
-using System.Collections.Generic;
 using Photon.Pun;
+using System.Collections.Generic;
 
 public class UIManager : MonoBehaviour
 {
@@ -11,8 +11,13 @@ public class UIManager : MonoBehaviour
     public Transform resourceUIParentTeamB; // Contenedor de UI para el Equipo B
 
     public TextMeshProUGUI resourceUITextPrefab; // Prefab del texto para los recursos
+    public TextMeshProUGUI phaseTimerText;       // Texto para mostrar el cronómetro
+    public TextMeshProUGUI soldierCountUITextPrefab; // Prefab de texto para soldados
+
     private Dictionary<string, TextMeshProUGUI> resourceUIElementsTeamA = new Dictionary<string, TextMeshProUGUI>();
     private Dictionary<string, TextMeshProUGUI> resourceUIElementsTeamB = new Dictionary<string, TextMeshProUGUI>();
+    private Dictionary<string, TextMeshProUGUI> soldierCountUIElements = new Dictionary<string, TextMeshProUGUI>();
+
 
     void Awake()
     {
@@ -37,6 +42,8 @@ public class UIManager : MonoBehaviour
             resourceUIParentTeamA.gameObject.SetActive(true);
             resourceUIParentTeamB.gameObject.SetActive(false);
             InitializeTeamResources("A", InventoryManager.Instance.GetResourcesForTeam("A"));
+            InitializeSoldierUI("A");
+            InventoryManager.Instance.SoldierCountUpdated += UpdateSoldierUI;
         }
         // Si el jugador es del equipo B, muestra la UI del equipo B y oculta la del equipo A
         else if (team == "B")
@@ -44,6 +51,8 @@ public class UIManager : MonoBehaviour
             resourceUIParentTeamA.gameObject.SetActive(false);
             resourceUIParentTeamB.gameObject.SetActive(true);
             InitializeTeamResources("B", InventoryManager.Instance.GetResourcesForTeam("B"));
+            InitializeSoldierUI("B");
+            InventoryManager.Instance.SoldierCountUpdated += UpdateSoldierUI;
         }
         else
         {
@@ -54,6 +63,15 @@ public class UIManager : MonoBehaviour
         InventoryManager.Instance.ResourceUpdated += UpdateResourceUI;
     }
 
+    void Update()
+    {
+        // Actualizar el cronómetro si está en la fase de preparación
+        if (PhotonGameManager.Instance.IsPreparationPhase())
+        {
+            UpdatePhaseTimerUI();
+        }
+    }
+
     void InitializeTeamResources(string team, List<InventoryManager.Resource> resources)
     {
         foreach (var resource in resources)
@@ -61,6 +79,16 @@ public class UIManager : MonoBehaviour
             CreateResourceUI(team, resource.name, resource.quantity);
         }
     }
+
+    void InitializeSoldierUI(string team)
+    {
+        Transform parent = team == "A" ? resourceUIParentTeamA : resourceUIParentTeamB;
+
+        TextMeshProUGUI soldierText = Instantiate(soldierCountUITextPrefab, parent, false);
+        soldierText.text = "Soldados: 0"; // Texto inicial
+        soldierCountUIElements[team] = soldierText;
+    }
+
 
     void CreateResourceUI(string team, string resourceName, int initialQuantity)
     {
@@ -124,6 +152,32 @@ public class UIManager : MonoBehaviour
         resourceUIElementsTeamB.Clear();
     }
 
+    void UpdatePhaseTimerUI()
+    {
+        // Obtén el tiempo restante del PhotonManager
+        float timeLeft = PhotonGameManager.Instance.preparationPhaseDuration - (PhotonGameManager.Instance.preparationPhaseDuration - PhotonGameManager.Instance.PhaseTimer);
+
+        // Formatear el tiempo en minutos y segundos
+        int minutes = Mathf.FloorToInt(timeLeft / 60f);
+        int seconds = Mathf.FloorToInt(timeLeft % 60f);
+
+        // Actualizar el texto en la UI
+        phaseTimerText.text = $"Preparación: {minutes:D2}:{seconds:D2}";
+    }
+
+    void UpdateSoldierUI(string team, int soldierCount)
+    {
+        if (soldierCountUIElements.TryGetValue(team, out TextMeshProUGUI soldierText))
+        {
+            soldierText.text = $"Soldados: {soldierCount}";
+        }
+        else
+        {
+            Debug.LogWarning($"UI de soldados no encontrada para el equipo {team}.");
+        }
+    }
+
+
     private string GetPlayerTeam()
     {
         // Obtén el equipo del jugador desde las propiedades personalizadas de Photon
@@ -134,6 +188,7 @@ public class UIManager : MonoBehaviour
         return null;
     }
 }
+
 
 
 
