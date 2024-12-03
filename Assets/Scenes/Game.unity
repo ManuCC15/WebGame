@@ -8135,7 +8135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   teamHealthUI: {fileID: 1904585180}
-  teamTag: TeamA
+  teamTag: TeamB
 --- !u!1001 &6767973137274117765
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8151,6 +8151,10 @@ PrefabInstance:
     - target: {fileID: 5422480161124213050, guid: 160758350c20fd84dbee8abc651d5d47, type: 3}
       propertyPath: sceneViewId
       value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7358836245950700507, guid: 160758350c20fd84dbee8abc651d5d47, type: 3}
+      propertyPath: teamTag
+      value: TeamA
       objectReference: {fileID: 0}
     - target: {fileID: 7358836245950700507, guid: 160758350c20fd84dbee8abc651d5d47, type: 3}
       propertyPath: teamHealthUI
