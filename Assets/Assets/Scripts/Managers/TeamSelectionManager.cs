@@ -28,6 +28,7 @@ public class TeamSelectionManager : MonoBehaviourPunCallbacks
         UpdateUI();
         startGameButton.interactable = false;
         startGameButton.onClick.AddListener(StartGame);
+        PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     public void JoinTeamA()
@@ -84,6 +85,7 @@ public class TeamSelectionManager : MonoBehaviourPunCallbacks
 
     public void StartGame()
     {
+        PhotonNetwork.AutomaticallySyncScene = true;
         photonView.RPC("LoadGameScene", RpcTarget.All);
     }
 
