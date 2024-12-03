@@ -84,10 +84,7 @@ public class TeamSelectionManager : MonoBehaviourPunCallbacks
 
     public void StartGame()
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.LoadLevel("Game");  // Cambiar por el nombre de la escena del juego
-        }
+        PhotonNetwork.LoadLevel("Game");
     }
 }
 
