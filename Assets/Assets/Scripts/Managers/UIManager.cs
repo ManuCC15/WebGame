@@ -6,10 +6,12 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
 
-    public Transform resourceUIParent;
+    public Transform resourceUIParentTeamA; // Contenedor de UI para el Equipo A
+    public Transform resourceUIParentTeamB; // Contenedor de UI para el Equipo B
 
-    public TextMeshProUGUI resourceUITextPrefab;
-    private Dictionary<string, TextMeshProUGUI> resourceUIElements = new Dictionary<string, TextMeshProUGUI>();
+    public TextMeshProUGUI resourceUITextPrefab; // Prefab del texto para los recursos
+    private Dictionary<string, TextMeshProUGUI> resourceUIElementsTeamA = new Dictionary<string, TextMeshProUGUI>();
+    private Dictionary<string, TextMeshProUGUI> resourceUIElementsTeamB = new Dictionary<string, TextMeshProUGUI>();
 
     void Awake()
     {
@@ -25,55 +27,89 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-        // Suscribir al evento de actualización de recursos
+        // Suscribirse al evento de actualización de recursos
         InventoryManager.Instance.ResourceUpdated += UpdateResourceUI;
 
         // Inicializar la UI
         ClearResourceUI();
 
-        foreach (var resource in InventoryManager.Instance.resources)
+        // Inicializar los recursos de ambos equipos
+        InitializeTeamResources("A", InventoryManager.Instance.GetResourcesForTeam("A"));
+        InitializeTeamResources("B", InventoryManager.Instance.GetResourcesForTeam("B"));
+    }
+
+    void InitializeTeamResources(string team, List<InventoryManager.Resource> resources)
+    {
+        foreach (var resource in resources)
         {
-            CreateResourceUI(resource.name, resource.quantity);
+            CreateResourceUI(team, resource.name, resource.quantity);
         }
     }
 
-    void CreateResourceUI(string resourceName, int initialQuantity)
+    void CreateResourceUI(string team, string resourceName, int initialQuantity)
     {
+        Dictionary<string, TextMeshProUGUI> resourceUIElements;
+        Transform parent;
+
+        if (team == "A")
+        {
+            resourceUIElements = resourceUIElementsTeamA;
+            parent = resourceUIParentTeamA;
+        }
+        else if (team == "B")
+        {
+            resourceUIElements = resourceUIElementsTeamB;
+            parent = resourceUIParentTeamB;
+        }
+        else
+        {
+            Debug.LogWarning($"Equipo desconocido: {team}");
+            return;
+        }
+
         if (!resourceUIElements.ContainsKey(resourceName)) // Evitar duplicados
         {
-            TextMeshProUGUI resourceText = Instantiate(resourceUITextPrefab);
-            resourceText.transform.SetParent(resourceUIParent, false);
+            TextMeshProUGUI resourceText = Instantiate(resourceUITextPrefab, parent, false);
 
             // Asignar el texto inicial
             resourceText.text = $"{resourceName}: {initialQuantity}";
 
-            // Guardar el UI del recurso
+            // Guardar el elemento UI del recurso
             resourceUIElements.Add(resourceName, resourceText);
         }
     }
 
-    // Actualizar la UI cuando cambian los recursos
-    void UpdateResourceUI(string resourceName, int newQuantity)
+    void UpdateResourceUI(string team, string resourceName, int newQuantity)
     {
+        Dictionary<string, TextMeshProUGUI> resourceUIElements = team == "A" ? resourceUIElementsTeamA : resourceUIElementsTeamB;
+
         if (resourceUIElements.TryGetValue(resourceName, out TextMeshProUGUI resourceText))
         {
             resourceText.text = $"{resourceName}: {newQuantity}";
         }
         else
         {
-            Debug.LogWarning($"Intento de actualizar un recurso inexistente: {resourceName}");
+            Debug.LogWarning($"Intento de actualizar un recurso inexistente: {resourceName} en el equipo {team}");
         }
     }
 
     void ClearResourceUI()
     {
-        foreach (var uiElement in resourceUIElements.Values)
+        foreach (var uiElement in resourceUIElementsTeamA.Values)
         {
             Destroy(uiElement.gameObject);
         }
-        resourceUIElements.Clear();
+        resourceUIElementsTeamA.Clear();
+
+        foreach (var uiElement in resourceUIElementsTeamB.Values)
+        {
+            Destroy(uiElement.gameObject);
+        }
+        resourceUIElementsTeamB.Clear();
     }
 }
+
+
 
 
 

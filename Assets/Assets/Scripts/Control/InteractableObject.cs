@@ -45,18 +45,32 @@ public class InteractableObject : MonoBehaviour
 
     void GatherResource()
     {
-        InventoryManager.Instance.AddResource(resourceType, resourceAmountPerCycle);
+        string team = GetPlayerTeam(); // Obtén el equipo del jugador
+        if (!string.IsNullOrEmpty(team))
+        {
+            InventoryManager.Instance.AddResource(resourceType, team, resourceAmountPerCycle);
+        }
+        else
+        {
+            Debug.LogWarning("El equipo del jugador no está definido. No se puede recolectar el recurso.");
+        }
     }
 
     public void CraftItem()
     {
-        if (isCraftingStation && InventoryManager.Instance.HasEnoughResource(requiredResource1, requiredAmount1)
-            && InventoryManager.Instance.HasEnoughResource(requiredResource2, requiredAmount2))
+        string team = GetPlayerTeam(); // Obtén el equipo del jugador
+        if (!string.IsNullOrEmpty(team) &&
+            InventoryManager.Instance.HasEnoughResource(requiredResource1, team, requiredAmount1) &&
+            InventoryManager.Instance.HasEnoughResource(requiredResource2, team, requiredAmount2))
         {
-            InventoryManager.Instance.ConsumeResource(requiredResource1, requiredAmount1);
-            InventoryManager.Instance.ConsumeResource(requiredResource2, requiredAmount2);
+            InventoryManager.Instance.ConsumeResource(requiredResource1, team, requiredAmount1);
+            InventoryManager.Instance.ConsumeResource(requiredResource2, team, requiredAmount2);
 
             photonView.RPC("CraftAndSpawnPrefab", RpcTarget.All);
+        }
+        else
+        {
+            Debug.LogWarning("No hay suficientes recursos o el equipo del jugador no está definido.");
         }
     }
 
@@ -68,7 +82,18 @@ public class InteractableObject : MonoBehaviour
             Instantiate(craftedPrefab, spawnLocation.position, spawnLocation.rotation);
         }
     }
+
+    private string GetPlayerTeam()
+    {
+        // Obtén el equipo del jugador desde las propiedades personalizadas de Photon.
+        if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("Team", out object team))
+        {
+            return team as string;
+        }
+        return null;
+    }
 }
+
 
 
 
