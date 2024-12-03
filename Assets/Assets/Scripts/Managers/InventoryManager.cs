@@ -35,7 +35,7 @@ public class InventoryManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        // Inicializar recursos para equipos
+        // Inicializar recursos para ambos equipos
         teamResources["A"] = new List<Resource>();
         teamResources["B"] = new List<Resource>();
     }
@@ -81,7 +81,7 @@ public class InventoryManager : MonoBehaviour
         PhotonNetwork.RaiseEvent(UpdateResourceEventCode, content, options, sendOptions);
     }
 
-    public void AddResource(string resourceName, string team, int amount)
+    public void AddResource(string team, string resourceName, int amount)
     {
         List<Resource> resources = GetResourcesForTeam(team);
         Resource resource = resources.Find(r => r.name == resourceName);
@@ -99,7 +99,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void ConsumeResource(string resourceName, string team, int amount)
+    public void ConsumeResource(string team, string resourceName, int amount)
     {
         List<Resource> resources = GetResourcesForTeam(team);
         Resource resource = resources.Find(r => r.name == resourceName);
@@ -117,14 +117,14 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public bool HasEnoughResource(string resourceName, string team, int requiredAmount)
+    public bool HasEnoughResource(string team, string resourceName, int requiredAmount)
     {
         List<Resource> resources = GetResourcesForTeam(team);
         Resource resource = resources.Find(r => r.name == resourceName);
         return resource != null && resource.quantity >= requiredAmount;
     }
 
-    public int GetResourceQuantity(string resourceName, string team)
+    public int GetResourceQuantity(string team, string resourceName)
     {
         List<Resource> resources = GetResourcesForTeam(team);
         Resource resource = resources.Find(r => r.name == resourceName);
@@ -156,8 +156,6 @@ public class InventoryManager : MonoBehaviour
         }
     }
 }
-
-
 
 
 
