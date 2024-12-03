@@ -29,6 +29,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         string team = GetPlayerTeam(); // Obtiene el equipo del jugador
+        Debug.Log($"Equipo del jugador: {team}");
 
         // Si el jugador es del equipo A, muestra la UI del equipo A y oculta la del equipo B
         if (team == "A")
