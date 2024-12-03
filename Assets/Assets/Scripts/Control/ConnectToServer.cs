@@ -10,6 +10,7 @@ public class ConnectToServer : MonoBehaviourPunCallbacks
     
     void Start()
     {
+        PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.ConnectUsingSettings();
     }
 
