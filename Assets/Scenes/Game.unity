@@ -393,7 +393,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b04b5b08e2b48b742816be9415a4e887, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceUIParent: {fileID: 2913749}
+  resourceUIParentTeamA: {fileID: 2913749}
+  resourceUIParentTeamB: {fileID: 2913749}
   resourceUITextPrefab: {fileID: 9017168964754661531, guid: 435ea46d826519249ad9fbce374f59a5, type: 3}
 --- !u!4 &237304368
 Transform:
@@ -5191,16 +5192,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b291c29902cf5f5418c97e1db2906f9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resources:
-  - name: Wood
-    quantity: 0
-    maxQuantity: 20
-  - name: Stone
-    quantity: 0
-    maxQuantity: 15
-  - name: Iron
-    quantity: 0
-    maxQuantity: 12
 --- !u!4 &1095391736
 Transform:
   m_ObjectHideFlags: 0
