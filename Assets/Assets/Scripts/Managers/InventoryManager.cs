@@ -16,7 +16,10 @@ public class InventoryManager : MonoBehaviour
         public int maxQuantity;
     }
 
-    // Diccionario de recursos dividido por equipo
+    // Listas de recursos para cada equipo
+    public List<Resource> initialResourcesTeamA = new List<Resource>();
+    public List<Resource> initialResourcesTeamB = new List<Resource>();
+
     private Dictionary<string, List<Resource>> teamResources = new Dictionary<string, List<Resource>>();
 
     public delegate void OnResourceUpdated(string team, string resourceName, int newQuantity);
@@ -36,8 +39,8 @@ public class InventoryManager : MonoBehaviour
         }
 
         // Inicializar recursos para ambos equipos
-        teamResources["A"] = new List<Resource>();
-        teamResources["B"] = new List<Resource>();
+        teamResources["A"] = new List<Resource>(initialResourcesTeamA);
+        teamResources["B"] = new List<Resource>(initialResourcesTeamB);
     }
 
     void OnEnable()
@@ -144,18 +147,20 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    // Función para establecer los recursos iniciales para cada equipo (en tiempo de ejecución)
     public void InitializeTeamResources(string team, List<Resource> initialResources)
     {
         if (teamResources.ContainsKey(team))
         {
-            teamResources[team] = initialResources;
+            teamResources[team] = new List<Resource>(initialResources); // Reemplazar recursos existentes
         }
         else
         {
-            teamResources.Add(team, initialResources);
+            teamResources.Add(team, new List<Resource>(initialResources)); // Añadir nuevo equipo
         }
     }
 }
+
 
 
 

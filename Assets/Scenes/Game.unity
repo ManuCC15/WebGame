@@ -5192,6 +5192,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b291c29902cf5f5418c97e1db2906f9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialResourcesTeamA:
+  - name: Wood
+    quantity: 0
+    maxQuantity: 20
+  - name: Iron
+    quantity: 0
+    maxQuantity: 12
+  - name: Gold
+    quantity: 0
+    maxQuantity: 30
+  initialResourcesTeamB:
+  - name: Wood
+    quantity: 0
+    maxQuantity: 20
+  - name: Iron
+    quantity: 0
+    maxQuantity: 12
+  - name: Gold
+    quantity: 0
+    maxQuantity: 30
 --- !u!4 &1095391736
 Transform:
   m_ObjectHideFlags: 0
@@ -5225,8 +5245,7 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 1
   observableSearch: 2
-  ObservedComponents:
-  - {fileID: 1095391735}
+  ObservedComponents: []
   sceneViewId: 4
   InstantiationId: 0
   isRuntimeInstantiated: 0
