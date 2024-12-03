@@ -178,7 +178,7 @@ MonoBehaviour:
     m_Bottom: 0
   m_ChildAlignment: 1
   m_Spacing: 0
-  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
@@ -1361,11 +1361,23 @@ PrefabInstance:
     - target: {fileID: 2124796801629439147, guid: e16577a4d782d1c428c446e9c952f6e5, type: 3}
       propertyPath: craftedPrefab
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2124796801629439147, guid: e16577a4d782d1c428c446e9c952f6e5, type: 3}
+      propertyPath: soldierPrefab
+      value: 
       objectReference: {fileID: 6128392919417313016, guid: 2b04e3ff1623f634f9c822fa73ab6830, type: 3}
     - target: {fileID: 2124796801629439147, guid: e16577a4d782d1c428c446e9c952f6e5, type: 3}
       propertyPath: spawnLocation
       value: 
       objectReference: {fileID: 1270962890}
+    - target: {fileID: 2124796801629439147, guid: e16577a4d782d1c428c446e9c952f6e5, type: 3}
+      propertyPath: isCraftingSoldier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2124796801629439147, guid: e16577a4d782d1c428c446e9c952f6e5, type: 3}
+      propertyPath: isCraftingStation
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2337588391396612720, guid: e16577a4d782d1c428c446e9c952f6e5, type: 3}
       propertyPath: sceneViewId
       value: 11
@@ -5645,7 +5657,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 291, y: 154.14738}
+  m_AnchoredPosition: {x: 31, y: 185}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1055118899
@@ -5796,8 +5808,8 @@ MonoBehaviour:
   - name: Gold
     quantity: 0
     maxQuantity: 30
-  spawnLocationTeamA: {fileID: 0}
-  spawnLocationTeamB: {fileID: 0}
+  spawnLocationTeamA: {fileID: 8267121283300177194}
+  spawnLocationTeamB: {fileID: 1270962890}
 --- !u!4 &1095391736
 Transform:
   m_ObjectHideFlags: 0
@@ -7851,7 +7863,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3216858581041411655, guid: e1d957ff479687b4f9e22dc4d16e709a, type: 3}
       propertyPath: m_Name
-      value: SpawnSoldiers (1)
+      value: SpawnSoldiersB
       objectReference: {fileID: 0}
     - target: {fileID: 5766389890226923225, guid: e1d957ff479687b4f9e22dc4d16e709a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8631,7 +8643,7 @@ MonoBehaviour:
     m_Bottom: 0
   m_ChildAlignment: 1
   m_Spacing: 0
-  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
@@ -9337,7 +9349,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3216858581041411655, guid: e1d957ff479687b4f9e22dc4d16e709a, type: 3}
       propertyPath: m_Name
-      value: SpawnSoldiers
+      value: SpawnSoldiersA
       objectReference: {fileID: 0}
     - target: {fileID: 5766389890226923225, guid: e1d957ff479687b4f9e22dc4d16e709a, type: 3}
       propertyPath: m_LocalPosition.x
