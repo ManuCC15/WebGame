@@ -13,23 +13,22 @@ public class Spawner : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        AssignTeamAndSpawnPlayer();
+        SpawnPlayer();
     }
 
-    private void AssignTeamAndSpawnPlayer()
+    private void SpawnPlayer()
     {
-        // Determinar el equipo en base al orden de conexión
-        int playerIndex = PhotonNetwork.LocalPlayer.ActorNumber; // Identificador único del jugador
-        bool isTeam1 = playerIndex % 2 != 0; // Jugadores con índice impar -> equipo 1, par -> equipo 2
+        // Obtener el equipo del jugador
+        string team = PhotonNetwork.LocalPlayer.CustomProperties["Team"].ToString();
 
-        // Seleccionar prefab y punto de spawn
-        GameObject playerPrefab = isTeam1 ? playerPrefabTeam1 : playerPrefabTeam2;
-        Transform spawnPoint = isTeam1 ? GetRandomSpawnPoint(spawnPointsTeam1) : GetRandomSpawnPoint(spawnPointsTeam2);
+        // Elegir el prefab y el punto de spawn según el equipo
+        GameObject playerPrefab = team == "A" ? playerPrefabTeam1 : playerPrefabTeam2;
+        Transform spawnPoint = team == "A" ? GetRandomSpawnPoint(spawnPointsTeam1) : GetRandomSpawnPoint(spawnPointsTeam2);
 
-        // Instanciar el jugador en la red
+        // Instanciar al jugador en la red
         GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, spawnPoint.position, spawnPoint.rotation);
 
-        // Configurar el jugador local (puedes añadir más lógica según sea necesario)
+        // Configurar al jugador local
         player.GetComponent<PlayerSetup>().IsLocalPLayer();
     }
 
@@ -41,7 +40,7 @@ public class Spawner : MonoBehaviourPunCallbacks
             return null;
         }
 
-        // Elegir un punto de spawn aleatorio
         return spawnPoints[Random.Range(0, spawnPoints.Length)];
     }
 }
+
