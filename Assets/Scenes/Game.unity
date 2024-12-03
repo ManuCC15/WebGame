@@ -5192,7 +5192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b291c29902cf5f5418c97e1db2906f9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialResourcesTeamA:
+  resourcesTeamA:
   - name: Wood
     quantity: 0
     maxQuantity: 20
@@ -5202,7 +5202,7 @@ MonoBehaviour:
   - name: Gold
     quantity: 0
     maxQuantity: 30
-  initialResourcesTeamB:
+  resourcesTeamB:
   - name: Wood
     quantity: 0
     maxQuantity: 20
