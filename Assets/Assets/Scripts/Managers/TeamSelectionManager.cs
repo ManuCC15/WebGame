@@ -19,6 +19,12 @@ public class TeamSelectionManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
+        // Asegúrate de que todos los objetos de la UI estén asignados
+        if (teamAButton == null || teamBButton == null || startGameButton == null)
+        {
+            Debug.LogError("Uno o más botones no están asignados en el Inspector.");
+            return; // Detenemos la ejecución del Start si falta alguna asignación
+        }
         UpdateUI();
         startGameButton.interactable = false;
         startGameButton.onClick.AddListener(StartGame);
@@ -26,11 +32,24 @@ public class TeamSelectionManager : MonoBehaviourPunCallbacks
 
     public void JoinTeamA()
     {
-        if (teamACount < MaxPlayersPerTeam && string.IsNullOrEmpty(playerTeam))
+        Debug.Log("Intentando unirse al Equipo A");
+
+        if (PhotonNetwork.LocalPlayer != null)
         {
-            playerTeam = "A";
-            PhotonNetwork.LocalPlayer.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "Team", "A" } });
-            photonView.RPC("UpdateTeamCount", RpcTarget.All, "A", 1);
+            if (teamACount < MaxPlayersPerTeam && string.IsNullOrEmpty(playerTeam))
+            {
+                playerTeam = "A";
+                PhotonNetwork.LocalPlayer.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "Team", "A" } });
+                photonView.RPC("UpdateTeamCount", RpcTarget.All, "A", 1);
+            }
+            else
+            {
+                Debug.LogWarning("Equipo A ya lleno o el jugador ya pertenece a un equipo.");
+            }
+        }
+        else
+        {
+            Debug.LogError("LocalPlayer no está inicializado.");
         }
     }
 
@@ -63,7 +82,7 @@ public class TeamSelectionManager : MonoBehaviourPunCallbacks
         teamBButton.interactable = teamBCount < MaxPlayersPerTeam && string.IsNullOrEmpty(playerTeam);
     }
 
-    void StartGame()
+    public void StartGame()
     {
         if (PhotonNetwork.IsMasterClient)
         {
