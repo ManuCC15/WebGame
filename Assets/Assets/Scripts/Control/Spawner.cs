@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
@@ -11,16 +10,21 @@ public class Spawner : MonoBehaviourPunCallbacks
     public Transform[] spawnPointsTeam1; // Puntos de spawn para el equipo 1
     public Transform[] spawnPointsTeam2; // Puntos de spawn para el equipo 2
 
- private void Start()
-{
-    if (PhotonNetwork.IsMasterClient) // Solo el Master Client instancia los jugadores
+    private void Start()
     {
+        // Cada cliente es responsable de instanciar su propio jugador
         SpawnPlayer();
     }
-}
 
     private void SpawnPlayer()
     {
+        // Validar que el jugador tenga un equipo asignado
+        if (!PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("Team"))
+        {
+            Debug.LogError("El jugador no tiene un equipo asignado en CustomProperties.");
+            return;
+        }
+
         // Obtener el equipo del jugador
         string team = PhotonNetwork.LocalPlayer.CustomProperties["Team"].ToString();
 
@@ -28,24 +32,16 @@ public class Spawner : MonoBehaviourPunCallbacks
         GameObject playerPrefab = team == "A" ? playerPrefabTeam1 : playerPrefabTeam2;
         Transform spawnPoint = team == "A" ? GetRandomSpawnPoint(spawnPointsTeam1) : GetRandomSpawnPoint(spawnPointsTeam2);
 
-        // Instanciar al jugador en la red
+        // Instanciar el jugador en la red
         GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, spawnPoint.position, spawnPoint.rotation);
 
-        // Verificar si este jugador es el local y configurar su cámara y controles
+        // Configurar el jugador local
         PlayerSetup playerSetup = player.GetComponent<PlayerSetup>();
-        if (playerSetup != null)
+        if (playerSetup != null && player.GetComponent<PhotonView>().IsMine)
         {
-            if (player.GetComponent<PhotonView>().IsMine) // Solo para el jugador local
-            {
-                playerSetup.IsLocalPlayer();
-            }
-            else
-            {
-                playerSetup.DisableNonLocalPlayer();
-            }
+            playerSetup.IsLocalPlayer();
         }
     }
-
 
     private Transform GetRandomSpawnPoint(Transform[] spawnPoints)
     {
@@ -58,4 +54,5 @@ public class Spawner : MonoBehaviourPunCallbacks
         return spawnPoints[Random.Range(0, spawnPoints.Length)];
     }
 }
+
 
