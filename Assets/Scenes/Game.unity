@@ -5859,7 +5859,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f80c2332ba4ca24683cfb3fe6f1a223, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  preparationPhaseDuration: 60
+  preparationPhaseDuration: 10
   battlePhaseDuration: 120
   spawnSoldierButton: {fileID: 1499812938}
 --- !u!1 &1143075171

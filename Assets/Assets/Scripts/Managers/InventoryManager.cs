@@ -119,7 +119,7 @@ public class InventoryManager : MonoBehaviour
             foreach (var soldier in storedSoldiers)
             {
                 // Enviar un RPC para que todos los jugadores instancien el soldado
-                PhotonView.Get(this).RPC("SpawnSoldierPrefab", RpcTarget.All, team, soldier.name, spawnLocation, spawnLocation.rotation);
+                PhotonView.Get(this).RPC("SpawnSoldierPrefab", RpcTarget.All, team, soldier.name, spawnLocation.position, spawnLocation.rotation);
             }
 
             // Limpiar la lista después de instanciar
