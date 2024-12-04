@@ -112,13 +112,14 @@ public class InventoryManager : MonoBehaviour
     {
         string team = GetPlayerTeam();
         List<GameObject> storedSoldiers = team == "A" ? storedSoldiersTeamA : storedSoldiersTeamB;
+        Transform spawnLocation = team == "A" ? spawnLocationTeamA : spawnLocationTeamB;
 
         if (storedSoldiers.Count > 0)
         {
             foreach (var soldier in storedSoldiers)
             {
                 // Enviar un RPC para que todos los jugadores instancien el soldado
-                PhotonView.Get(this).RPC("SpawnSoldierPrefab", RpcTarget.All, team, soldier.name, spawnLocationTeamA.position, spawnLocationTeamA.rotation);
+                PhotonView.Get(this).RPC("SpawnSoldierPrefab", RpcTarget.All, team, soldier.name, spawnLocation, spawnLocation.rotation);
             }
 
             // Limpiar la lista después de instanciar
@@ -134,7 +135,7 @@ public class InventoryManager : MonoBehaviour
     [PunRPC]
     public void SpawnSoldierPrefab(string team, string soldierName, Vector3 position, Quaternion rotation)
     {
-        GameObject soldierPrefab = Resources.Load<GameObject>($"Soldiers/{soldierName}");
+        GameObject soldierPrefab = Resources.Load<GameObject>($"Prefab/{soldierName}");
 
         if (soldierPrefab != null)
         {
