@@ -64,7 +64,7 @@ public class FortressHealth : MonoBehaviourPunCallbacks
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Soldier")) // Si colisiona con un soldado
+        if (collision.gameObject.CompareTag("TeamA") || collision.gameObject.CompareTag("TeamB")) // Si colisiona con un soldado
         {
             Debug.Log("pegue");
             TakeDamage(10); // Inflige 10 puntos de daño

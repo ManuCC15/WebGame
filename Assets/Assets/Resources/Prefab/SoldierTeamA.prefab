@@ -15,9 +15,10 @@ GameObject:
   - component: {fileID: -2248641441834345056}
   - component: {fileID: 5215740640006313849}
   - component: {fileID: 6814938680744764561}
+  - component: {fileID: 1713321004035225808}
   m_Layer: 10
-  m_Name: Square
-  m_TagString: Soldier
+  m_Name: SoldierTeamA
+  m_TagString: TeamA
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109,6 +110,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: -2248641441834345056}
+  - {fileID: 1713321004035225808}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -125,8 +127,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
-  target: {fileID: 0}
-  direction: 0
+  minDamage: 5
+  maxDamage: 15
+  maxHealth: 100
+  teamTag: TeamA
 --- !u!114 &-2248641441834345056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,5 +217,21 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.15, y: 1.15}
   m_EdgeRadius: 0
+--- !u!114 &1713321004035225808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6128392919417313016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e7cb724808c322458aa4d15f5035fa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 1
+  m_TeleportIfDistanceGreaterThan: 3

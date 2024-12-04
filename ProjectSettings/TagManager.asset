@@ -7,6 +7,8 @@ TagManager:
   - Bullet
   - Castle
   - Castle2
+  - TeamA
+  - TeamB
   - Soldier
   layers:
   - Default
@@ -19,8 +21,8 @@ TagManager:
   - 
   - Obstaculos
   - Interactable
-  - Soldier
-  - 
+  - SoldierTeamA
+  - SoldierTeamB
   - 
   - 
   - 

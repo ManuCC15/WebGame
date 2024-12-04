@@ -1384,7 +1384,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5371154670036848033, guid: e16577a4d782d1c428c446e9c952f6e5, type: 3}
       propertyPath: m_Name
-      value: SoldierSpawner (1)
+      value: SoldierSpawner B
       objectReference: {fileID: 0}
     - target: {fileID: 7163671800141338408, guid: e16577a4d782d1c428c446e9c952f6e5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9014,7 +9014,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5371154670036848033, guid: e16577a4d782d1c428c446e9c952f6e5, type: 3}
       propertyPath: m_Name
-      value: SoldierSpawner
+      value: SoldierSpawner A
       objectReference: {fileID: 0}
     - target: {fileID: 7163671800141338408, guid: e16577a4d782d1c428c446e9c952f6e5, type: 3}
       propertyPath: m_LocalPosition.x
