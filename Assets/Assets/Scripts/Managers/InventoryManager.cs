@@ -112,13 +112,13 @@ public class InventoryManager : MonoBehaviour
     {
         string team = GetPlayerTeam();
         List<GameObject> storedSoldiers = team == "A" ? storedSoldiersTeamA : storedSoldiersTeamB;
-        Transform spawnLocation = team == "A" ? spawnLocationTeamA : spawnLocationTeamB;
 
         if (storedSoldiers.Count > 0)
         {
             foreach (var soldier in storedSoldiers)
             {
-                PhotonView.Get(this).RPC("SpawnSoldierPrefab", RpcTarget.All, team, spawnLocation.position, spawnLocation.rotation);
+                // Enviar un RPC para que todos los jugadores instancien el soldado
+                PhotonView.Get(this).RPC("SpawnSoldierPrefab", RpcTarget.All, team, soldier.name, spawnLocationTeamA.position, spawnLocationTeamA.rotation);
             }
 
             // Limpiar la lista después de instanciar
@@ -132,10 +132,18 @@ public class InventoryManager : MonoBehaviour
     }
 
     [PunRPC]
-    public void SpawnSoldierPrefab(string team, Vector3 position, Quaternion rotation)
+    public void SpawnSoldierPrefab(string team, string soldierName, Vector3 position, Quaternion rotation)
     {
-        GameObject soldierPrefab = team == "A" ? storedSoldiersTeamA[0] : storedSoldiersTeamB[0];
-        Instantiate(soldierPrefab, position, rotation);
+        GameObject soldierPrefab = Resources.Load<GameObject>($"Soldiers/{soldierName}");
+
+        if (soldierPrefab != null)
+        {
+            Instantiate(soldierPrefab, position, rotation);
+        }
+        else
+        {
+            Debug.LogError($"El prefab del soldado '{soldierName}' no se encontró en la carpeta Resources/Soldiers.");
+        }
     }
 
     private void SyncResourceUpdate(string team, string resourceName, int newQuantity)
