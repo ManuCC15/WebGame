@@ -84,9 +84,9 @@ public class UIManager : MonoBehaviour
     {
         Transform parent = team == "A" ? resourceUIParentTeamA : resourceUIParentTeamB;
 
-        TextMeshProUGUI soldierText = Instantiate(soldierCountUITextPrefab, parent, false);
-        soldierText.text = "Soldados: 0"; // Texto inicial
-        soldierCountUIElements[team] = soldierText;
+        //TextMeshProUGUI soldierText = Instantiate(soldierCountUITextPrefab, parent, false);
+        soldierCountUITextPrefab.text = "Soldados: 0"; // Texto inicial
+        soldierCountUIElements[team] = soldierCountUITextPrefab;
     }
 
 
