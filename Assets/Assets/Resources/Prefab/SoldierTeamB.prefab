@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 5311999712668084181}
   m_Layer: 11
   m_Name: SoldierTeamB
-  m_TagString: TeamB
+  m_TagString: B
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -126,11 +126,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f391683b9d7f7944faf8059945b6fd9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: -1
-  minDamage: 5
-  maxDamage: 15
-  maxHealth: 100
-  teamTag: TeamB
+  speed: 2
+  maxHealth: 30
+  currentHealth: 0
+  attackRange: 1.5
+  teamTag: B
+  targetPosition: {fileID: 1062431050517160111, guid: 160758350c20fd84dbee8abc651d5d47, type: 3}
 --- !u!114 &-2248641441834345056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,7 +174,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &6814938680744764561
 BoxCollider2D:
   m_ObjectHideFlags: 0

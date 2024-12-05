@@ -49,6 +49,9 @@ MonoBehaviour:
   - UpdateResourceOnAllClients
   - SpawnSoldierPrefab
   - SyncHealth
+  - Die
+  - ApplyDamageToEnemy
+  - RequestSoldierSpawn
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1

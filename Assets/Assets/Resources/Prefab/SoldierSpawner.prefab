@@ -172,11 +172,13 @@ MonoBehaviour:
   resourceAmountPerCycle: 1
   gatherInterval: 5
   isCraftingStation: 1
+  isCraftingSoldier: 0
   requiredResource1: Wood
   requiredAmount1: 5
   requiredResource2: Iron
   requiredAmount2: 2
   craftedPrefab: {fileID: 6128392919417313016, guid: 4891e28cd1cce3c47a1d94bdb01a6922, type: 3}
+  soldierPrefab: {fileID: 0}
   spawnLocation: {fileID: 0}
 --- !u!114 &8612120866414840336
 MonoBehaviour:

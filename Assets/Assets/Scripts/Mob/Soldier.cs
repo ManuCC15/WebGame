@@ -2,85 +2,122 @@ using System.Collections;
 using UnityEngine;
 using Photon.Pun;
 
+
 public class Soldier : MonoBehaviour
 {
-    public int speed;
-    public int minDamage = 5; // Daño mínimo
-    public int maxDamage = 15; // Daño máximo
-    public int maxHealth = 100; // Salud máxima
-    private int currentHealth;
-
-    public string teamTag; // Etiqueta del equipo (TeamA o TeamB)
+    public float speed = 5f;
+    public int maxHealth = 100;
+    [SerializeField]private int currentHealth;
+    public float attackRange = 1.5f;  // Distancia a la que comienza el combate
+    private float attackCooldown = 1f;
+    private bool canAttack = true;
+    public string teamTag;  // "TeamA" o "TeamB"
 
     private PhotonView photonView;
+    public GameObject targetPosition;
+    private bool isDead = false;
 
     void Start()
     {
         photonView = GetComponent<PhotonView>();
+        if (photonView != null)
+        {
+            photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+        }
+
         currentHealth = maxHealth;
+
+        if (photonView.IsMine)
+        {
+            Debug.Log($"{gameObject.name} es controlado por este cliente.");
+        }
+        else
+        {
+            Debug.Log($"{gameObject.name} NO es controlado por este cliente.");
+        }
     }
 
     void Update()
     {
-        transform.position += new Vector3(-speed * Time.deltaTime, 0f, 0f);
+        if (isDead) return;  // No se mueve ni hace nada si está muerto
+
+        // Movimiento hacia el punto objetivo
+        MoveToTarget();
+
+        // Si el soldado tiene un PhotonView y es el suyo propio, puede atacar
+        if (photonView.IsMine && canAttack)
+        {
+            Debug.Log("entre1 - Está controlado por este cliente");
+            LookForEnemies();
+        }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    // Mover al objetivo
+    void MoveToTarget()
     {
-        // Colisión con el castillo
-        if (collision.gameObject.CompareTag("Castle"))
+        if (targetPosition != null && targetPosition.transform.position != transform.position)
         {
-            if (teamTag == "TeamB")
-            {
-                // Lógica para dañar el castillo del equipo A
-                Debug.Log("Soldado de TeamB dañó el castillo de TeamA.");
-            }
+            Vector3 direction = (targetPosition.transform.position - transform.position).normalized;
+            transform.position += direction * speed * Time.deltaTime;
         }
-        else if (collision.gameObject.CompareTag("Castle2"))
+        else
         {
-            if (teamTag == "TeamA")
-            {
-                // Lógica para dañar el castillo del equipo B
-                Debug.Log("Soldado de TeamA dañó el castillo de TeamB.");
-            }
+            Debug.Log("No se ha asignado un objetivo o ya hemos llegado.");
         }
-        // Colisión con otro soldado
-        else if (collision.gameObject.CompareTag("TeamA") || collision.gameObject.CompareTag("TeamB"))
+    }
+
+    // Verificar si hay enemigos cerca para iniciar combate
+    void LookForEnemies()
+    {
+        Debug.Log("Verificando enemigos...");
+
+        // Buscar un enemigo dentro del rango de ataque
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, attackRange);
+        foreach (var enemy in hitEnemies)
         {
-            if (collision.gameObject.CompareTag(teamTag)) return; // Ignorar si son del mismo equipo
+            Debug.Log($"Objeto detectado: {enemy.gameObject.name}");
 
-            // Iniciar combate
-            Soldier enemySoldier = collision.GetComponent<Soldier>();
-            if (enemySoldier != null)
+            if (enemy.CompareTag(teamTag)) continue;  // Evitar atacar a aliados
+
+            Soldier enemySoldier = enemy.GetComponent<Soldier>();
+            if (enemySoldier != null && enemySoldier.teamTag != teamTag && canAttack)
             {
-                Debug.Log("ataque"+teamTag);
-
+                Debug.Log("¡Enemigo encontrado! Iniciando ataque.");
                 StartCoroutine(Attack(enemySoldier));
             }
         }
     }
 
+    // Iniciar un ataque contra un enemigo
     private IEnumerator Attack(Soldier enemySoldier)
     {
-        while (enemySoldier != null && enemySoldier.currentHealth > 0)
+        if (enemySoldier == null || enemySoldier.isDead) yield break;
+
+        canAttack = false;
+
+        while (enemySoldier != null && !enemySoldier.isDead && currentHealth > 0)
         {
-            int damage = Random.Range(5, 15); // Daño aleatorio
-            enemySoldier.TakeDamage(damage);
+            Debug.Log("Atacando al enemigo...");
+            int damage = Random.Range(5, 15);  // Daño aleatorio
+            enemySoldier.TakeDamage(damage);  // Aplicar daño al enemigo
 
             Debug.Log($"{gameObject.name} atacó a {enemySoldier.gameObject.name} con {damage} de daño.");
 
-            yield return new WaitForSeconds(1f); // Intervalo entre golpes
+            yield return new WaitForSeconds(attackCooldown);
         }
+
+        canAttack = true;
     }
 
+    // Recibir daño
     [PunRPC]
     public void TakeDamage(int damage)
     {
-        if (!photonView.IsMine) return; // Asegúrate de que solo el propietario reduce la salud.
+        if (isDead) return;
 
         currentHealth -= damage;
-        Debug.Log($"{gameObject.name} recibió {damage} de daño. Salud restante: {currentHealth}");
         photonView.RPC("SyncHealth", RpcTarget.All, currentHealth);
+        Debug.Log($"{gameObject.name} recibió {damage} de daño. Salud restante: {currentHealth}");
 
         if (currentHealth <= 0)
         {
@@ -88,19 +125,43 @@ public class Soldier : MonoBehaviour
         }
     }
 
-
-
     [PunRPC]
     public void SyncHealth(int newHealth)
     {
         currentHealth = newHealth;
-        Debug.Log($"La salud del soldado se sincronizó: {currentHealth}");
+        Debug.Log($"La salud de {gameObject.name} se sincronizó: {currentHealth}");
     }
 
+    // Matar al soldado
     private void Die()
     {
+        isDead = true;
         Debug.Log($"{gameObject.name} ha muerto.");
+
         PhotonNetwork.Destroy(gameObject);
     }
+
+    // Sincronización de datos (salud y posición)
+    //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    //{
+    //    if (stream.IsWriting)
+    //    {
+    //        // Enviar datos (salud y posición) del soldado
+    //        stream.SendNext(currentHealth);
+    //        stream.SendNext(transform.position);
+    //    }
+    //    else
+    //    {
+    //        // Recibir datos del soldado (salud y posición)
+    //        currentHealth = (int)stream.ReceiveNext();
+    //        transform.position = (Vector3)stream.ReceiveNext();
+    //    }
+    //}
+
+
 }
+
+
+
+
 

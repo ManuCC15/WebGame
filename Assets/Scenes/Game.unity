@@ -9184,7 +9184,7 @@ MonoBehaviour:
   canvas: {fileID: 124457435}
   canvasMensage: {fileID: 929144363}
   teamHealthUI: {fileID: 1904585180}
-  teamTag: TeamB
+  teamTag: A
 --- !u!1001 &6767973137274117765
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9207,7 +9207,7 @@ PrefabInstance:
       objectReference: {fileID: 124457435}
     - target: {fileID: 7358836245950700507, guid: 160758350c20fd84dbee8abc651d5d47, type: 3}
       propertyPath: teamTag
-      value: TeamA
+      value: B
       objectReference: {fileID: 0}
     - target: {fileID: 7358836245950700507, guid: 160758350c20fd84dbee8abc651d5d47, type: 3}
       propertyPath: teamHealthUI
