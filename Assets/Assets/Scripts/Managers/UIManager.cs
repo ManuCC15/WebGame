@@ -85,7 +85,7 @@ public class UIManager : MonoBehaviour
         Transform parent = team == "A" ? resourceUIParentTeamA : resourceUIParentTeamB;
 
         //TextMeshProUGUI soldierText = Instantiate(soldierCountUITextPrefab, parent, false);
-        soldierCountUITextPrefab.text = "Soldados: 0"; // Texto inicial
+        soldierCountUITextPrefab.text = "Soldiers: 0"; // Texto inicial
         soldierCountUIElements[team] = soldierCountUITextPrefab;
     }
 
@@ -169,7 +169,7 @@ public class UIManager : MonoBehaviour
     {
         if (soldierCountUIElements.TryGetValue(team, out TextMeshProUGUI soldierText))
         {
-            soldierText.text = $"Soldados: {soldierCount}";
+            soldierText.text = $"Soldiers: {soldierCount}";
         }
         else
         {

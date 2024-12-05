@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 5692602662282620675}
   - component: {fileID: 4699243661307019832}
   - component: {fileID: 1695589231302025448}
+  - component: {fileID: 660259706753748259}
   m_Layer: 0
-  m_Name: Main Camera
+  m_Name: Main CameraB
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -137,6 +138,24 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!114 &660259706753748259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1055922408253994656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fc683e5467624e4f8ca033a9aa533c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerTransform: {fileID: 42255945233505894}
+  preparationOffset: {x: 0, y: 0, z: -10}
+  battlePosition: {x: -20, y: 0, z: -10}
+  battleZoomSize: 15
+  transitionSpeed: 2
+  mainCamera: {fileID: 5692602662282620675}
 --- !u!1 &6278171898124595324
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,7 +237,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 4
   m_Sprite: {fileID: -888328213, guid: c8a545f57637f924bb2b23fba14b7c30, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

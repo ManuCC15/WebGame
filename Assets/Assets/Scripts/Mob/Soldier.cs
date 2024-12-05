@@ -119,10 +119,7 @@ public class Soldier : MonoBehaviour
         photonView.RPC("SyncHealth", RpcTarget.All, currentHealth);
         Debug.Log($"{gameObject.name} recibió {damage} de daño. Salud restante: {currentHealth}");
 
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
+
     }
 
     [PunRPC]
@@ -130,6 +127,10 @@ public class Soldier : MonoBehaviour
     {
         currentHealth = newHealth;
         Debug.Log($"La salud de {gameObject.name} se sincronizó: {currentHealth}");
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
     }
 
     // Matar al soldado
