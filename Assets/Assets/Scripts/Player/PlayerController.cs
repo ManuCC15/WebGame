@@ -66,10 +66,13 @@ public class PlayerController : MonoBehaviour
 
                 if (currentInteractable != null)
                 {
-                    if (currentInteractable.isResourceNode)
+                    if (currentInteractable != null && currentInteractable.isResourceNode)
                     {
-                        // Inicia la recolección de recursos
-                        currentInteractable.StartGathering();
+                        // Inicia la recolección de recursos solo si no se está recolectando ya
+                        if (!currentInteractable.IsGathering())
+                        {
+                            currentInteractable.StartGathering();
+                        }
                     }
                     else if (currentInteractable.isCraftingStation)
                     {

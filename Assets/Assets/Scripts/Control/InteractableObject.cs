@@ -28,12 +28,18 @@ public class InteractableObject : MonoBehaviour
         photonView = GetComponent<PhotonView>();
     }
 
+    public bool IsGathering()
+    {
+        return isPlayerGathering;
+    }
+
     public void StartGathering()
     {
-        if (isResourceNode)
+        if (isResourceNode && !isPlayerGathering)
         {
             isPlayerGathering = true;
-            InvokeRepeating(nameof(GatherResource), 0f, gatherInterval);
+            Debug.Log("Iniciando recolección de recursos...");
+            InvokeRepeating(nameof(GatherResource), gatherInterval, gatherInterval); // Primer ciclo tras el intervalo
         }
     }
 
@@ -42,6 +48,7 @@ public class InteractableObject : MonoBehaviour
         if (isResourceNode && isPlayerGathering)
         {
             isPlayerGathering = false;
+            Debug.Log("Deteniendo recolección de recursos...");
             CancelInvoke(nameof(GatherResource));
         }
     }
