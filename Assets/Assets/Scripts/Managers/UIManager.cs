@@ -162,7 +162,7 @@ public class UIManager : MonoBehaviour
         int seconds = Mathf.FloorToInt(timeLeft % 60f);
 
         // Actualizar el texto en la UI
-        phaseTimerText.text = $"Preparación: {minutes:D2}:{seconds:D2}";
+        phaseTimerText.text = $"SetUp: {minutes:D2}:{seconds:D2}";
     }
 
     void UpdateSoldierUI(string team, int soldierCount)

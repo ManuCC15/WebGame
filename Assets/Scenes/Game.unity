@@ -250,6 +250,10 @@ PrefabInstance:
       value: Iron
       objectReference: {fileID: 0}
     - target: {fileID: 6748043192224767954, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
+      propertyPath: gatherInterval
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6748043192224767954, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
       propertyPath: isResourceNode
       value: 1
       objectReference: {fileID: 0}
@@ -562,8 +566,16 @@ PrefabInstance:
       value: Wood
       objectReference: {fileID: 0}
     - target: {fileID: 6748043192224767954, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
+      propertyPath: gatherInterval
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6748043192224767954, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
       propertyPath: isResourceNode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6748043192224767954, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
+      propertyPath: resourceAmountPerCycle
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9074656380338539589, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
       propertyPath: m_Sprite
@@ -1130,17 +1142,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: Join Room
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 580d0a1780970604c82d176f588012f5, type: 2}
+  m_sharedMaterial: {fileID: -4090420983430305379, guid: 580d0a1780970604c82d176f588012f5, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4279047452
+  m_fontColor: {r: 0.10980393, g: 0.08235294, b: 0.050980397, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1157,15 +1169,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_fontStyle: 1
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -1431,15 +1443,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: Soldiers
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 580d0a1780970604c82d176f588012f5, type: 2}
+  m_sharedMaterial: {fileID: -4090420983430305379, guid: 580d0a1780970604c82d176f588012f5, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4291021521
-  m_fontColor: {r: 0.81886786, g: 0.7903183, b: 0.76479167, a: 1}
+    rgba: 4279047452
+  m_fontColor: {r: 0.10980393, g: 0.08235294, b: 0.050980397, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1456,13 +1468,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 18
-  m_fontSizeBase: 18
+  m_fontSize: 25
+  m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -5952,17 +5964,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Join Room
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 580d0a1780970604c82d176f588012f5, type: 2}
+  m_sharedMaterial: {fileID: -4090420983430305379, guid: 580d0a1780970604c82d176f588012f5, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4279047452
+  m_fontColor: {r: 0.10980393, g: 0.08235294, b: 0.050980397, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5979,15 +5991,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_fontStyle: 1
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -6067,9 +6079,6 @@ MonoBehaviour:
   - name: Iron
     quantity: 0
     maxQuantity: 12
-  - name: Gold
-    quantity: 0
-    maxQuantity: 30
   resourcesTeamB:
   - name: Wood
     quantity: 0
@@ -6077,9 +6086,6 @@ MonoBehaviour:
   - name: Iron
     quantity: 0
     maxQuantity: 12
-  - name: Gold
-    quantity: 0
-    maxQuantity: 30
   spawnLocationTeamA: {fileID: 8267121283300177194}
   spawnLocationTeamB: {fileID: 1270962890}
 --- !u!4 &1095391736
@@ -6131,8 +6137,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f80c2332ba4ca24683cfb3fe6f1a223, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  preparationPhaseDuration: 30
-  battlePhaseDuration: 60
+  preparationPhaseDuration: 60
+  battlePhaseDuration: 50
   spawnSoldierButton: {fileID: 1499812938}
 --- !u!1 &1143075171
 GameObject:
@@ -8246,15 +8252,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: Exit
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 580d0a1780970604c82d176f588012f5, type: 2}
+  m_sharedMaterial: {fileID: -4090420983430305379, guid: 580d0a1780970604c82d176f588012f5, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4291151315
-  m_fontColor: {r: 0.82641506, g: 0.77184045, b: 0.77184045, a: 1}
+    rgba: 4278850846
+  m_fontColor: {r: 0.11698109, g: 0.080738425, b: 0.037742954, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -8271,13 +8277,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 25
+  m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -8307,7 +8313,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 4.9512706, z: 0, w: 3.3877125}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -8382,8 +8388,16 @@ PrefabInstance:
       value: Iron
       objectReference: {fileID: 0}
     - target: {fileID: 6748043192224767954, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
+      propertyPath: gatherInterval
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6748043192224767954, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
       propertyPath: isResourceNode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6748043192224767954, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
+      propertyPath: resourceAmountPerCycle
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7399688908330862915, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
       propertyPath: m_Radius
@@ -8999,17 +9013,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: Join Room
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 580d0a1780970604c82d176f588012f5, type: 2}
+  m_sharedMaterial: {fileID: -4090420983430305379, guid: 580d0a1780970604c82d176f588012f5, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4279047452
+  m_fontColor: {r: 0.10980393, g: 0.08235294, b: 0.050980397, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -9026,15 +9040,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_fontStyle: 1
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -9141,7 +9155,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 353.2, y: -174.4}
+  m_AnchoredPosition: {x: 301.3, y: -174.4}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2003125501
@@ -9164,17 +9178,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: Join Room
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 580d0a1780970604c82d176f588012f5, type: 2}
+  m_sharedMaterial: {fileID: -4090420983430305379, guid: 580d0a1780970604c82d176f588012f5, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4279047452
+  m_fontColor: {r: 0.10980393, g: 0.08235294, b: 0.050980397, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -9191,15 +9205,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22
-  m_fontSizeBase: 22
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_fontStyle: 1
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -9227,7 +9241,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 77.31417, w: 13.471333}
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -9659,12 +9673,16 @@ PrefabInstance:
       value: Wood
       objectReference: {fileID: 0}
     - target: {fileID: 6748043192224767954, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
+      propertyPath: gatherInterval
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6748043192224767954, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
       propertyPath: isResourceNode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6748043192224767954, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
       propertyPath: resourceAmountPerCycle
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7399688908330862915, guid: 98367026c59be654bb1b2f26fb6ec47b, type: 3}
       propertyPath: m_Radius
