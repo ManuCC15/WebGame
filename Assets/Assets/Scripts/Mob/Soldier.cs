@@ -22,7 +22,10 @@ public class Soldier : MonoBehaviour
         photonView = GetComponent<PhotonView>();
         if (photonView != null)
         {
-            photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+            if (!photonView.IsMine && photonView.Owner != PhotonNetwork.LocalPlayer)
+            {
+                photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+            }
         }
 
         currentHealth = maxHealth;
@@ -139,25 +142,24 @@ public class Soldier : MonoBehaviour
         isDead = true;
         Debug.Log($"{gameObject.name} ha muerto.");
 
-        PhotonNetwork.Destroy(gameObject);
+        if (photonView.IsMine || PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
+        else
+        {
+            photonView.RPC("RequestDestroy", RpcTarget.MasterClient);
+        }
     }
 
-    // Sincronización de datos (salud y posición)
-    //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    //{
-    //    if (stream.IsWriting)
-    //    {
-    //        // Enviar datos (salud y posición) del soldado
-    //        stream.SendNext(currentHealth);
-    //        stream.SendNext(transform.position);
-    //    }
-    //    else
-    //    {
-    //        // Recibir datos del soldado (salud y posición)
-    //        currentHealth = (int)stream.ReceiveNext();
-    //        transform.position = (Vector3)stream.ReceiveNext();
-    //    }
-    //}
+    [PunRPC]
+    private void RequestDestroy()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
+    }
 
 
 }

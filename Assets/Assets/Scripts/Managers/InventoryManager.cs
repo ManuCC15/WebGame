@@ -160,6 +160,13 @@ private IEnumerator ButtonCooldown()
             
             GameObject soldier = PhotonNetwork.Instantiate(prefabPath, position, rotation);
 
+            // Transferir propiedad al cliente que llamó a esta función
+            PhotonView soldierPhotonView = soldier.GetComponent<PhotonView>();
+            if (soldierPhotonView != null && soldierPhotonView.Owner != PhotonNetwork.LocalPlayer)
+            {
+                soldierPhotonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+            }
+
             // Configurar el equipo del soldado
             Soldier soldierScript = soldier.GetComponent<Soldier>();
             if (soldierScript != null)
