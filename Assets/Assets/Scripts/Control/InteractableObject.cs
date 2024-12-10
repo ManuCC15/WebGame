@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ public class InteractableObject : MonoBehaviour
 
     public Transform spawnLocation;
 
-    private bool isPlayerGathering;
+    public bool isPlayerGathering;
     private PhotonView photonView;
 
     void Awake()
@@ -39,7 +40,7 @@ public class InteractableObject : MonoBehaviour
         {
             isPlayerGathering = true;
             Debug.Log("Iniciando recolección de recursos...");
-            InvokeRepeating(nameof(GatherResource), gatherInterval, gatherInterval); // Primer ciclo tras el intervalo
+            InvokeRepeating(nameof(GatherResource), gatherInterval, gatherInterval);
         }
     }
 
@@ -52,7 +53,7 @@ public class InteractableObject : MonoBehaviour
             CancelInvoke(nameof(GatherResource));
         }
     }
-
+    
     void GatherResource()
     {
         string team = GetPlayerTeam(); // Obtén el equipo del jugador
@@ -92,6 +93,7 @@ public class InteractableObject : MonoBehaviour
             Instantiate(craftedPrefab, spawnLocation.position, spawnLocation.rotation);
         }
     }
+    
 
     private string GetPlayerTeam()
     {

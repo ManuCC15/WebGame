@@ -1,5 +1,6 @@
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -7,14 +8,24 @@ public class PlayerController : MonoBehaviour
     public Transform movePoint; // Punto de referencia para el movimiento
     public LayerMask interactableLayer; // Capa de objetos interactuables
     public LayerMask obstacles; // muros
-
+    
+    private float gatherProgress; // Tiempo actual de recolección
+    public Slider progressionBar;
+    public GameObject progressionCanvas;
+    
     private PhotonView photonView;
     private InteractableObject currentInteractable; // Objeto interactuable actual
+
 
     void Start()
     {
         movePoint.parent = null; // Independiza el punto de movimiento del jugador
         photonView = GetComponent<PhotonView>();
+        if (progressionBar != null)
+        {
+            progressionCanvas.SetActive(false); // Oculta la barra al inicio
+            progressionBar.value = 0f; // Resetea el progreso
+        }
     }
 
     void Update()
@@ -22,6 +33,8 @@ public class PlayerController : MonoBehaviour
         HandleMovement(); // Gestión del movimiento
 
         HandleInteraction(); // Gestión de interacción
+
+        UpdateGatherProgress();
     }
 
     // Controla el movimiento en una grilla
@@ -72,6 +85,7 @@ public class PlayerController : MonoBehaviour
                         if (!currentInteractable.IsGathering())
                         {
                             currentInteractable.StartGathering();
+                            progressionCanvas.SetActive(true); // Activa la barra de progreso
                         }
                     }
                     else if (currentInteractable.isCraftingStation)
@@ -93,12 +107,40 @@ public class PlayerController : MonoBehaviour
             if (currentInteractable.isResourceNode)
             {
                 currentInteractable.StopGathering();
+                progressionCanvas.SetActive(false); // Desactiva la barra de progreso
+                gatherProgress = 0f;
             }
             currentInteractable = null;
         }
     }
 
-private void OnDrawGizmosSelected()
+    // Actualiza el progreso de recolección
+    void UpdateGatherProgress()
+    {
+        if (currentInteractable != null && currentInteractable.isResourceNode && currentInteractable.IsGathering())
+        {
+            gatherProgress += Time.deltaTime / currentInteractable.gatherInterval;
+            gatherProgress = Mathf.Clamp01(gatherProgress); // Limita entre 0 y 1
+            UpdateProgressBar(gatherProgress);
+
+            if (gatherProgress >= 1f)
+            {
+                gatherProgress = 0f;
+            }
+        }
+    }
+
+    // Actualiza la barra de progreso visual
+    void UpdateProgressBar(float progress)
+    {
+        if (progressionBar != null)
+        {
+            progressionBar.value = progress;
+        }
+    }
+
+
+    private void OnDrawGizmosSelected()
     {
         // Visualizar el radio de interacción
         Gizmos.color = Color.green;
