@@ -1251,6 +1251,7 @@ GameObject:
   - component: {fileID: 479094000}
   - component: {fileID: 479093999}
   - component: {fileID: 479094002}
+  - component: {fileID: 479094003}
   m_Layer: 5
   m_Name: BackToMainMenui
   m_TagString: Untagged
@@ -1322,16 +1323,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 479094002}
-        m_TargetAssemblyTypeName: CreateAndJoin, Assembly-CSharp
-        m_MethodName: LeaveGame
-        m_Mode: 1
+      - m_Target: {fileID: 479094003}
+        m_TargetAssemblyTypeName: SwitchScene, Assembly-CSharp
+        m_MethodName: Switch
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: MainMenu
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &479094000
@@ -1387,6 +1388,18 @@ MonoBehaviour:
   createRoom: {fileID: 0}
   joinRoom: {fileID: 0}
   game: 
+--- !u!114 &479094003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 479093996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2d8f8731edfb9649ba92f674adcc736, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &513435630
 GameObject:
   m_ObjectHideFlags: 0
@@ -8833,15 +8846,15 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1792735429}
-        m_TargetAssemblyTypeName: CreateAndJoin, Assembly-CSharp
-        m_MethodName: LeaveGame
-        m_Mode: 1
+        m_TargetAssemblyTypeName: SwitchScene, Assembly-CSharp
+        m_MethodName: Switch
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Loading
+          m_StringArgument: MainMenu
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1792735427
@@ -8891,12 +8904,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1792735423}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e84d9fb49b42b864e86df8c655a32a42, type: 3}
+  m_Script: {fileID: 11500000, guid: c2d8f8731edfb9649ba92f674adcc736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  createRoom: {fileID: 0}
-  joinRoom: {fileID: 0}
-  game: 
 --- !u!1 &1824823646
 GameObject:
   m_ObjectHideFlags: 0
