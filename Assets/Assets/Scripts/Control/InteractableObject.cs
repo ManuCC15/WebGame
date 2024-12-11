@@ -102,7 +102,17 @@ public class InteractableObject : MonoBehaviour
         {
             return team as string;
         }
-        return null;
+        else
+        {
+            return AssingTeam();
+        }
+        //return null;
+    }
+
+    private string AssingTeam()
+    {
+        string team = "A";
+        return team;
     }
 
     public void StoreSoldier()

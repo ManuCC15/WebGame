@@ -7,6 +7,7 @@ public class TeamSelectionManager : MonoBehaviourPunCallbacks
 {
     public Button teamAButton;
     public Button teamBButton;
+    public Button changeTeamButton;
     public Button startGameButton;
 
     public TextMeshProUGUI teamAStatusText;
@@ -80,6 +81,33 @@ public class TeamSelectionManager : MonoBehaviourPunCallbacks
 
         teamAButton.interactable = teamACount < MaxPlayersPerTeam && string.IsNullOrEmpty(playerTeam);
         teamBButton.interactable = teamBCount < MaxPlayersPerTeam && string.IsNullOrEmpty(playerTeam);
+        changeTeamButton.interactable = !string.IsNullOrEmpty(playerTeam);
+    }
+    public void ChangeTeam()
+    {
+        if (!string.IsNullOrEmpty(playerTeam))
+        {
+            // Restar del equipo actual
+            photonView.RPC("UpdateTeamCount", RpcTarget.All, playerTeam, -1);
+
+            // Cambiar al otro equipo
+            if (playerTeam == "A" && teamBCount < MaxPlayersPerTeam)
+            {
+                playerTeam = "B";
+                PhotonNetwork.LocalPlayer.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "Team", "B" } });
+                photonView.RPC("UpdateTeamCount", RpcTarget.All, "B", 1);
+            }
+            else if (playerTeam == "B" && teamACount < MaxPlayersPerTeam)
+            {
+                playerTeam = "A";
+                PhotonNetwork.LocalPlayer.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "Team", "A" } });
+                photonView.RPC("UpdateTeamCount", RpcTarget.All, "A", 1);
+            }
+            else
+            {
+                Debug.LogWarning("No se puede cambiar de equipo. El otro equipo está lleno.");
+            }
+        }
     }
 
     public void StartGame()
