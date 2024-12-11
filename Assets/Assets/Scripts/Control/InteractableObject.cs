@@ -77,7 +77,7 @@ public class InteractableObject : MonoBehaviour
             InventoryManager.Instance.ConsumeResource(requiredResource1, team, requiredAmount1);
             InventoryManager.Instance.ConsumeResource(requiredResource2, team, requiredAmount2);
 
-            photonView.RPC("CraftAndSpawnPrefab", RpcTarget.All);
+            photonView.RPC("CraftAndSpawnPrefab", RpcTarget.Others);
         }
         else
         {
@@ -90,7 +90,7 @@ public class InteractableObject : MonoBehaviour
     {
         if (craftedPrefab != null)
         {
-            Instantiate(craftedPrefab, spawnLocation.position, spawnLocation.rotation);
+            PhotonNetwork.Instantiate(craftedPrefab.name, spawnLocation.position, spawnLocation.rotation);
         }
     }
     
