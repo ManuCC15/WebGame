@@ -12,6 +12,7 @@ TagManager:
   - Soldier
   - A
   - B
+  - Archer
   layers:
   - Default
   - TransparentFX

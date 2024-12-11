@@ -24,6 +24,10 @@ public class InteractableObject : MonoBehaviour
     public bool isPlayerGathering;
     private PhotonView photonView;
 
+    // Diccionario estático para rastrear los Archers por equipo
+    private static Dictionary<string, GameObject> existingArchers = new Dictionary<string, GameObject>();
+
+
     void Awake()
     {
         photonView = GetComponent<PhotonView>();
@@ -67,18 +71,30 @@ public class InteractableObject : MonoBehaviour
         }
     }
 
-    public void CraftItem()
+      public void CraftItem()
     {
         string team = GetPlayerTeam(); // Obtén el equipo del jugador
         if (!string.IsNullOrEmpty(team) &&
             InventoryManager.Instance.HasEnoughResource(requiredResource1, team, requiredAmount1) &&
             InventoryManager.Instance.HasEnoughResource(requiredResource2, team, requiredAmount2))
         {
-            InventoryManager.Instance.ConsumeResource(requiredResource1, team, requiredAmount1);
-            InventoryManager.Instance.ConsumeResource(requiredResource2, team, requiredAmount2);
+            if (photonView.IsMine)
+            {
+                if (existingArchers.ContainsKey(team))
+                {
+                    Debug.LogWarning($"Ya existe un Archer para el equipo {team}. No se puede crear otro.");
+                    return; // No continuar si ya existe un Archer
+                }
 
-            photonView.RPC("CraftAndSpawnPrefab", RpcTarget.Others);
+                // Consumir recursos en el propietario
+                InventoryManager.Instance.ConsumeResource(requiredResource1, team, requiredAmount1);
+                InventoryManager.Instance.ConsumeResource(requiredResource2, team, requiredAmount2);
+
+                // Notificar al resto que debe crear el Archer
+                photonView.RPC("CraftAndSpawnPrefab", RpcTarget.AllBuffered, team);
+            }
         }
+
         else
         {
             Debug.LogWarning("No hay suficientes recursos o el equipo del jugador no está definido.");
@@ -86,11 +102,27 @@ public class InteractableObject : MonoBehaviour
     }
 
     [PunRPC]
-    void CraftAndSpawnPrefab()
+    void CraftAndSpawnPrefab(string team)
     {
         if (craftedPrefab != null)
         {
-            PhotonNetwork.Instantiate(craftedPrefab.name, spawnLocation.position, spawnLocation.rotation);
+            if (existingArchers.ContainsKey(team))
+            {
+                Debug.LogWarning($"Ya existe un Archer para el equipo {team}. No se puede crear otro.");
+                return;
+            }
+
+            // Instanciar el Archer y registrarlo en el diccionario
+            GameObject newObject = PhotonNetwork.Instantiate(craftedPrefab.name, spawnLocation.position, spawnLocation.rotation);
+            existingArchers[team] = newObject;
+        }
+    }
+
+    public static void ClearArcherReference(string team, GameObject archer)
+    {
+        if (existingArchers.TryGetValue(team, out GameObject existingArcher) && existingArcher == archer)
+        {
+            existingArchers.Remove(team); // Limpia la referencia si coincide
         }
     }
     
@@ -100,13 +132,14 @@ public class InteractableObject : MonoBehaviour
         // Obtén el equipo del jugador desde las propiedades personalizadas de Photon.
         if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("Team", out object team))
         {
+            Debug.Log(team);
             return team as string;
         }
         else
         {
-            return AssingTeam();
+            return null;
         }
-        //return null;
+
     }
 
     private string AssingTeam()

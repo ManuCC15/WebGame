@@ -23,7 +23,21 @@ public class Archer : MonoBehaviourPun
 
     void OnDestroy()
     {
-        PhotonGameManager.Instance.OnBattlePhaseStart -= OnBattlePhaseStart;  // Desubscribirse del evento
+        PhotonGameManager.Instance.OnBattlePhaseStart -= OnBattlePhaseStart; // Desubscribirse del evento
+
+        // Limpia la referencia en el diccionario de Archers
+        string team = GetPlayerTeam(); // Implementa GetPlayerTeam() si no existe
+        InteractableObject.ClearArcherReference(team, gameObject);
+    }
+
+    private string GetPlayerTeam()
+    {
+        // Obtén el equipo del Archer desde las propiedades del PhotonView o una variable interna
+        if (photonView.Owner.CustomProperties.TryGetValue("Team", out object team))
+        {
+            return team as string;
+        }
+        return null;
     }
 
     void Update()
@@ -79,18 +93,6 @@ public class Archer : MonoBehaviourPun
         canAttack = true;  // Permite el siguiente disparo
     }
 
-    // Método para verificar si la animación de disparo ha terminado
-    //private float GetShootAnimationDuration()
-    //{
-    //    // Obtener la duración de la animación "Shoot" desde el Animator
-    //    AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-    //    if (stateInfo.IsName("ShootArcherA"))
-    //    {
-    //        return stateInfo.length;
-    //    }
-    //    return 0f;  // Si no se está ejecutando "Shoot", no se espera nada
-    //}
-
     // Evento que se llama al inicio de una fase de batalla
     private void OnBattlePhaseStart()
     {
@@ -103,6 +105,8 @@ public class Archer : MonoBehaviourPun
             PhotonNetwork.Destroy(gameObject);
         }
     }
+
+
 
     private void OnDrawGizmosSelected()
     {

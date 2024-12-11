@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5957691081082655744}
   m_Layer: 10
   m_Name: TowerA
-  m_TagString: Untagged
+  m_TagString: Archer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -187,7 +187,7 @@ GameObject:
   - component: {fileID: 7653302800119195373}
   m_Layer: 10
   m_Name: ArcherA
-  m_TagString: A
+  m_TagString: Archer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
