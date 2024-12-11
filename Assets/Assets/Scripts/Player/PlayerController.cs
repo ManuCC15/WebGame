@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private PhotonView photonView;
     private InteractableObject currentInteractable; // Objeto interactuable actual
 
+    private bool isGathering = false;
 
     void Start()
     {
@@ -40,7 +41,7 @@ public class PlayerController : MonoBehaviour
     // Controla el movimiento en una grilla
     void HandleMovement()
     {
-        if (photonView.IsMine)
+        if (photonView.IsMine && !isGathering)
         {
             transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
 
@@ -85,6 +86,7 @@ public class PlayerController : MonoBehaviour
                         if (!currentInteractable.IsGathering())
                         {
                             currentInteractable.StartGathering();
+                            isGathering = true;
                             progressionCanvas.SetActive(true); // Activa la barra de progreso
                         }
                     }
@@ -107,6 +109,7 @@ public class PlayerController : MonoBehaviour
             if (currentInteractable.isResourceNode)
             {
                 currentInteractable.StopGathering();
+                isGathering = false;
                 progressionCanvas.SetActive(false); // Desactiva la barra de progreso
                 gatherProgress = 0f;
             }
