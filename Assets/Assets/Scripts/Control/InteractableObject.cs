@@ -78,21 +78,18 @@ public class InteractableObject : MonoBehaviour
             InventoryManager.Instance.HasEnoughResource(requiredResource1, team, requiredAmount1) &&
             InventoryManager.Instance.HasEnoughResource(requiredResource2, team, requiredAmount2))
         {
-            if (photonView.IsMine)
+            if (existingArchers.ContainsKey(team))
             {
-                if (existingArchers.ContainsKey(team))
-                {
-                    Debug.LogWarning($"Ya existe un Archer para el equipo {team}. No se puede crear otro.");
-                    return; // No continuar si ya existe un Archer
-                }
-
-                // Consumir recursos en el propietario
-                InventoryManager.Instance.ConsumeResource(requiredResource1, team, requiredAmount1);
-                InventoryManager.Instance.ConsumeResource(requiredResource2, team, requiredAmount2);
-
-                // Notificar al resto que debe crear el Archer
-                photonView.RPC("CraftAndSpawnPrefab", RpcTarget.Others, team);
+                Debug.LogWarning($"Ya existe un Archer para el equipo {team}. No se puede crear otro.");
+                return; // No continuar si ya existe un Archer
             }
+
+            // Consumir recursos en el propietario
+            InventoryManager.Instance.ConsumeResource(requiredResource1, team, requiredAmount1);
+            InventoryManager.Instance.ConsumeResource(requiredResource2, team, requiredAmount2);
+
+            // Notificar al resto que debe crear el Archer
+            photonView.RPC("CraftAndSpawnPrefab", RpcTarget.Others, team);
         }
 
         else
