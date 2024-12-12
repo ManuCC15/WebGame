@@ -17,6 +17,8 @@ public class Soldier : MonoBehaviour
     public GameObject targetPosition;
     private bool isDead = false;
 
+    private SpriteRenderer sprite;
+
     void Start()
     {
         photonView = GetComponent<PhotonView>();
@@ -38,6 +40,8 @@ public class Soldier : MonoBehaviour
         {
             Debug.Log($"{gameObject.name} NO es controlado por este cliente.");
         }
+
+        sprite = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -67,6 +71,7 @@ public class Soldier : MonoBehaviour
         {
             Debug.Log("No se ha asignado un objetivo o ya hemos llegado.");
         }
+        sprite.color = Color.white;
     }
 
     // Verificar si hay enemigos cerca para iniciar combate
@@ -117,7 +122,7 @@ public class Soldier : MonoBehaviour
     public void TakeDamage(int damage)
     {
         if (isDead) return;
-
+        sprite.color = Color.red;
         currentHealth -= damage;
         photonView.RPC("SyncHealth", RpcTarget.All, currentHealth);
         Debug.Log($"{gameObject.name} recibió {damage} de daño. Salud restante: {currentHealth}");
