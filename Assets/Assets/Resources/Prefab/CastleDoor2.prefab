@@ -142,7 +142,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  canvas: {fileID: 0}
-  canvasMensage: {fileID: 0}
   teamHealthUI: {fileID: 0}
   teamTag: TeamB

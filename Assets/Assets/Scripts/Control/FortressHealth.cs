@@ -64,30 +64,12 @@ public class FortressHealth : MonoBehaviourPunCallbacks
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("A") || collision.gameObject.CompareTag("B"))
+        if (collision.gameObject.CompareTag("A") || collision.gameObject.CompareTag("B")) // Si colisiona con un soldado
         {
-            Debug.Log("Soldado alcanzó la fortaleza");
+            Debug.Log("pegue");
+            TakeDamage(10); // Inflige 10 puntos de daño
 
-            Soldier soldier = collision.GetComponent<Soldier>();
-            if (soldier != null && PhotonNetwork.IsMasterClient)
-            {
-                ApplyDamage(10); // Llama al método RPC para sincronizar el daño
-                PhotonNetwork.Destroy(collision.gameObject); 
-            }
-            else
-            {
-                // Si no eres el MasterClient, solicita al MasterClient que destruya el objeto
-                photonView.RPC("RequestDestroy", RpcTarget.MasterClient, collision.gameObject);
-            }
-        }
-    }
-
-    [PunRPC]
-    void RequestDestroy(GameObject gO)
-    {
-        if (PhotonNetwork.IsMasterClient && photonView != null)
-        {
-            PhotonNetwork.Destroy(gO);
+            Destroy(collision.gameObject);
         }
     }
 }
