@@ -91,7 +91,7 @@ public class InteractableObject : MonoBehaviour
                 InventoryManager.Instance.ConsumeResource(requiredResource2, team, requiredAmount2);
 
                 // Notificar al resto que debe crear el Archer
-                photonView.RPC("CraftAndSpawnPrefab", RpcTarget.AllBuffered, team);
+                photonView.RPC("CraftAndSpawnPrefab", RpcTarget.Others, team);
             }
         }
 
