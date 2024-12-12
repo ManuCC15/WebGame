@@ -43,7 +43,7 @@ public class InteractableObject : MonoBehaviour
             InvokeRepeating(nameof(GatherResource), gatherInterval, gatherInterval);
         }
     }
-
+    
     public void StopGathering()
     {
         if (isResourceNode && isPlayerGathering)
