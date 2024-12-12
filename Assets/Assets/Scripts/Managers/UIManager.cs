@@ -13,12 +13,13 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI resourceUITextPrefab; // Prefab del texto para los recursos
     public TextMeshProUGUI phaseTimerText;       // Texto para mostrar el cronómetro
     public TextMeshProUGUI soldierCountUITextPrefab; // Prefab de texto para soldados
+    public TextMeshProUGUI canvasMensage;
 
     private Dictionary<string, TextMeshProUGUI> resourceUIElementsTeamA = new Dictionary<string, TextMeshProUGUI>();
     private Dictionary<string, TextMeshProUGUI> resourceUIElementsTeamB = new Dictionary<string, TextMeshProUGUI>();
     private Dictionary<string, TextMeshProUGUI> soldierCountUIElements = new Dictionary<string, TextMeshProUGUI>();
 
-
+    public GameObject canvasWinLose;
     void Awake()
     {
         if (Instance == null)
@@ -61,6 +62,10 @@ public class UIManager : MonoBehaviour
 
         // Suscribirse al evento de actualización de recursos
         InventoryManager.Instance.ResourceUpdated += UpdateResourceUI;
+
+        canvasWinLose.SetActive(false);
+
+       
     }
 
     void Update()
@@ -186,6 +191,34 @@ public class UIManager : MonoBehaviour
             return team as string;
         }
         return null;
+    }
+
+    public void FortressDestroyedA()
+    {
+        string team = GetPlayerTeam();
+        canvasWinLose.SetActive(true);
+        if (team == "A")
+        {
+            canvasMensage.text = $"{team} team lose the game";
+        }
+        if (team == "B")
+        {
+            canvasMensage.text = $"{team} team win the game";
+        }
+    }
+
+    public void FortressDestroyedB()
+    {
+        string team = GetPlayerTeam();
+        canvasWinLose.SetActive(true);
+        if (team == "A")
+        {
+            canvasMensage.text = $"{team} team win the game";
+        }
+        if (team == "B")
+        {
+            canvasMensage.text = $"{team} team lose the game";
+        }
     }
 }
 

@@ -1,6 +1,7 @@
 using UnityEngine;
 using Photon.Pun;
 using TMPro;
+using System;
 
 public class FortressHealth : MonoBehaviourPunCallbacks
 {
@@ -12,6 +13,7 @@ public class FortressHealth : MonoBehaviourPunCallbacks
 
     public TextMeshProUGUI teamHealthUI; // Referencia al texto en la UI para la vida
     public string teamTag; // Etiqueta que indica el equipo de la fortaleza (ejemplo: "TeamA" o "TeamB")
+
 
     void Start()
     {
@@ -51,9 +53,14 @@ public class FortressHealth : MonoBehaviourPunCallbacks
     private void FortressDestroyed()
     {
         Debug.Log($"{teamTag} Fortress has been destroyed!");
-        // Aquí puedes añadir lógica adicional, como terminar el juego o notificar a los jugadores.
-        canvas.SetActive(true);
-        canvasMensage.text = $"{teamTag} has win the game";
+        if(teamTag == "A" && currentHealth <= 0)
+        {
+            UIManager.Instance.FortressDestroyedA();
+        }
+        else if (teamTag == "B" && currentHealth <= 0)
+        {
+            UIManager.Instance.FortressDestroyedB();
+        }
     }
 
     // Llamar a la función de daño sincronizada
@@ -71,6 +78,11 @@ public class FortressHealth : MonoBehaviourPunCallbacks
 
             Destroy(collision.gameObject);
         }
+    }
+
+    public float GetCurrentLife()
+    {
+        return currentHealth;
     }
 }
 
