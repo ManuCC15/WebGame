@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 5215740640006313849}
   - component: {fileID: 6814938680744764561}
   - component: {fileID: 5311999712668084181}
+  - component: {fileID: 1452889696880986565}
+  - component: {fileID: 7408532421880054672}
   m_Layer: 11
   m_Name: SoldierTeamB
   m_TagString: B
@@ -111,6 +113,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: -2248641441834345056}
   - {fileID: 5311999712668084181}
+  - {fileID: 7408532421880054672}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -236,3 +239,45 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 0
   m_TeleportEnabled: 1
   m_TeleportIfDistanceGreaterThan: 3
+--- !u!95 &1452889696880986565
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6128392919417313016}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ea72ccf57c176274eb445e290fbf1831, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7408532421880054672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6128392919417313016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 9
+    SynchronizeType: 0
+    Name: Attacking
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0

@@ -17,16 +17,23 @@ public class Soldier : MonoBehaviour
     public GameObject targetPosition;
     private bool isDead = false;
 
+    private Animator animator;
     void Start()
     {
+        animator = GetComponent<Animator>();
         photonView = GetComponent<PhotonView>();
-        if (photonView != null)
-        {
-            if (!photonView.IsMine && photonView.Owner != PhotonNetwork.LocalPlayer)
-            {
-                photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
-            }
-        }
+        //if (photonView != null)
+        //{
+        //    // Si el objeto no tiene propietario (es huérfano), transfiere la propiedad al cliente actual
+        //    if (photonView.Owner == null || photonView.Owner.IsInactive)
+        //    {
+        //        if (PhotonNetwork.IsMasterClient)
+        //        {
+        //            photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+        //            Debug.Log($"{gameObject.name} no tenía propietario. Transferido al cliente actual.");
+        //        }
+        //    }
+        //}
 
         currentHealth = maxHealth;
 
@@ -42,7 +49,7 @@ public class Soldier : MonoBehaviour
 
     void Update()
     {
-        if (isDead) return;  // No se mueve ni hace nada si está muerto
+        if (!photonView.IsMine || isDead) return;  // No se mueve ni hace nada si está muerto
 
         // Movimiento hacia el punto objetivo
         MoveToTarget();
@@ -72,7 +79,6 @@ public class Soldier : MonoBehaviour
     // Verificar si hay enemigos cerca para iniciar combate
     void LookForEnemies()
     {
-        Debug.Log("Verificando enemigos...");
 
         // Buscar un enemigo dentro del rango de ataque
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, attackRange);
@@ -87,6 +93,7 @@ public class Soldier : MonoBehaviour
             {
                 Debug.Log("¡Enemigo encontrado! Iniciando ataque.");
                 StartCoroutine(Attack(enemySoldier));
+                break; // Solo ataca al primer enemigo detectado
             }
         }
     }
@@ -98,19 +105,19 @@ public class Soldier : MonoBehaviour
 
         canAttack = false;
 
-        while (enemySoldier != null && !enemySoldier.isDead && currentHealth > 0)
-        {
-            Debug.Log("Atacando al enemigo...");
-            int damage = Random.Range(5, 15);  // Daño aleatorio
-            enemySoldier.TakeDamage(damage);  // Aplicar daño al enemigo
+        // Activar la animación de ataque
+        animator.SetTrigger("Attacking");
 
-            Debug.Log($"{gameObject.name} atacó a {enemySoldier.gameObject.name} con {damage} de daño.");
+        // Aplicar daño
+        int damage = Random.Range(5, 15);
+        enemySoldier.TakeDamage(damage);
 
-            yield return new WaitForSeconds(attackCooldown);
-        }
+        Debug.Log($"{gameObject.name} atacó a {enemySoldier.gameObject.name} con {damage} de daño.");
 
-        canAttack = true;
+        yield return new WaitForSeconds(attackCooldown);
+        //canAttack = true; 
     }
+
 
     // Recibir daño
     [PunRPC]
@@ -123,6 +130,12 @@ public class Soldier : MonoBehaviour
         Debug.Log($"{gameObject.name} recibió {damage} de daño. Salud restante: {currentHealth}");
 
 
+    }
+
+    public void OnAttackingAnimationEnd()
+    {
+        Debug.Log("Animación de ataque finalizada");
+        canAttack = true;  // Permite el siguiente disparo
     }
 
     [PunRPC]
@@ -139,28 +152,37 @@ public class Soldier : MonoBehaviour
     // Matar al soldado
     private void Die()
     {
+        if (isDead) return; // Evita que el método se ejecute dos veces
         isDead = true;
+
         Debug.Log($"{gameObject.name} ha muerto.");
+
+        // Asegúrate de que el MasterClient maneja la destrucción
+        if (PhotonNetwork.IsMasterClient)
+        {
+            if (photonView != null && photonView.IsMine)
+            {
+                PhotonNetwork.Destroy(gameObject);
+            }
+        }
+        else
+        {
+            // Si no eres el MasterClient, solicita al MasterClient que destruya el objeto
+            photonView.RPC("RequestDestroy", RpcTarget.MasterClient);
+        }
+    }
+
+    // RPC para que el MasterClient destruya el objeto
+    [PunRPC]
+    void RequestDestroy()
+    {
+        PhotonView photonView = GetComponent<PhotonView>();
 
         if (photonView.IsMine || PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.Destroy(gameObject);
         }
-        else
-        {
-            photonView.RPC("RequestDestroy", RpcTarget.MasterClient);
-        }
     }
-
-    [PunRPC]
-    private void RequestDestroy()
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.Destroy(gameObject);
-        }
-    }
-
 
 }
 

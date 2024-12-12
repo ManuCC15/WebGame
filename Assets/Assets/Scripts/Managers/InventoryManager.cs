@@ -111,74 +111,81 @@ public class InventoryManager : MonoBehaviour
     }
 
     // Instanciar soldados almacenados de un equipo
- public void SpawnStoredSoldiers()
-{
-    if (isOnCooldown)
+    public void SpawnStoredSoldiers()
     {
-        Debug.LogWarning("El botón está en cooldown. Espera antes de presionarlo nuevamente.");
-        return;
-    }
-
-    string team = GetPlayerTeam();
-    List<GameObject> storedSoldiers = team == "A" ? storedSoldiersTeamA : storedSoldiersTeamB;
-
-    if (storedSoldiers.Count > 0)
-    {
-        GameObject soldier = storedSoldiers[0]; // Toma el primer soldado en la lista
-        Transform spawnLocation = team == "A" ? spawnLocationTeamA : spawnLocationTeamB;
-
-        // Enviar un RPC para que todos los jugadores instancien el soldado
-        PhotonView.Get(this).RPC("SpawnSoldierPrefab", RpcTarget.Others, team, soldier.name, spawnLocation.position, spawnLocation.rotation);
-
-        storedSoldiers.RemoveAt(0); // Elimina el soldado de la lista local
-        SoldierCountUpdated?.Invoke(team, storedSoldiers.Count); // Notifica la nueva cantidad a la UI
-
-        StartCoroutine(ButtonCooldown()); // Inicia el cooldown
-    }
-    else
-    {
-        Debug.LogWarning($"No hay soldados almacenados para el equipo {team}.");
-    }
-}
-
-private IEnumerator ButtonCooldown()
-{
-    isOnCooldown = true; // Activa el cooldown
-    yield return new WaitForSeconds(1f); // Tiempo de cooldown (ajustable)
-    isOnCooldown = false; // Desactiva el cooldown
-}
-
-
-    [PunRPC]
-    public void SpawnSoldierPrefab(string team, string soldierName, Vector3 position, Quaternion rotation)
-    {
-        //GameObject soldierPrefab = Resources.Load<GameObject>($"Prefab/{soldierName}");
-        string prefabPath = $"Prefab/{soldierName}";
-
-        if (prefabPath != null)
+        if (isOnCooldown)
         {
-            
-            GameObject soldier = PhotonNetwork.Instantiate(prefabPath, position, rotation);
+            Debug.LogWarning("El botón está en cooldown. Espera antes de presionarlo nuevamente.");
+            return;
+        }
 
-            // Transferir propiedad al cliente que llamó a esta función
-            PhotonView soldierPhotonView = soldier.GetComponent<PhotonView>();
-            if (soldierPhotonView != null && soldierPhotonView.Owner != PhotonNetwork.LocalPlayer)
-            {
-                soldierPhotonView.TransferOwnership(PhotonNetwork.LocalPlayer);
-            }
+        string team = GetPlayerTeam();
+        List<GameObject> storedSoldiers = team == "A" ? storedSoldiersTeamA : storedSoldiersTeamB;
 
-            // Configurar el equipo del soldado
+        if (storedSoldiers.Count > 0)
+        {
+            GameObject soldierPrefab = storedSoldiers[0]; // Toma el primer soldado en la lista
+            Transform spawnLocation = team == "A" ? spawnLocationTeamA : spawnLocationTeamB;
+
+            // Instancia el soldado de forma sincronizada en la red
+            GameObject soldier = PhotonNetwork.Instantiate($"Prefab/{soldierPrefab.name}", spawnLocation.position, spawnLocation.rotation);
+
+            // Configura el equipo del soldado
             Soldier soldierScript = soldier.GetComponent<Soldier>();
             if (soldierScript != null)
             {
                 soldierScript.teamTag = team;
             }
+
+            storedSoldiers.RemoveAt(0); // Elimina el soldado de la lista local
+            SoldierCountUpdated?.Invoke(team, storedSoldiers.Count); // Actualiza la UI
+
+            StartCoroutine(ButtonCooldown()); // Inicia el cooldown
         }
         else
         {
-            Debug.LogError($"El prefab del soldado '{soldierName}' no se encontró en la carpeta Resources/Soldiers.");
+            Debug.LogWarning($"No hay soldados almacenados para el equipo {team}.");
         }
     }
+
+    private IEnumerator ButtonCooldown()
+    {
+        isOnCooldown = true; // Activa el cooldown
+        yield return new WaitForSeconds(1f); // Tiempo de cooldown (ajustable)
+        isOnCooldown = false; // Desactiva el cooldown
+    }
+
+
+    //[PunRPC]
+    //public void SpawnSoldierPrefab(string team, string soldierName, Vector3 position, Quaternion rotation)
+    //{
+    //    //GameObject soldierPrefab = Resources.Load<GameObject>($"Prefab/{soldierName}");
+    //    string prefabPath = $"Prefab/{soldierName}";
+
+    //    if (prefabPath != null)
+    //    {
+            
+    //        GameObject soldier = PhotonNetwork.Instantiate(prefabPath, position, rotation);
+
+    //        // Transferir propiedad al cliente que llamó a esta función
+    //        PhotonView soldierPhotonView = soldier.GetComponent<PhotonView>();
+    //        if (soldierPhotonView != null && soldierPhotonView.Owner != PhotonNetwork.LocalPlayer)
+    //        {
+    //            soldierPhotonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+    //        }
+
+    //        // Configurar el equipo del soldado
+    //        Soldier soldierScript = soldier.GetComponent<Soldier>();
+    //        if (soldierScript != null)
+    //        {
+    //            soldierScript.teamTag = team;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError($"El prefab del soldado '{soldierName}' no se encontró en la carpeta Resources/Soldiers.");
+    //    }
+    //}
 
     private void SyncResourceUpdate(string team, string resourceName, int newQuantity)
     {
