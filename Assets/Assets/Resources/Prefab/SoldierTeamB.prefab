@@ -10,12 +10,14 @@ GameObject:
   m_Component:
   - component: {fileID: 7134889438564558616}
   - component: {fileID: 6273149954701491242}
-  - component: {fileID: -3379521476841943790}
   - component: {fileID: -182758008367235385}
+  - component: {fileID: 5466783216491108118}
   - component: {fileID: -2248641441834345056}
   - component: {fileID: 5215740640006313849}
   - component: {fileID: 6814938680744764561}
+  - component: {fileID: -3379521476841943790}
   - component: {fileID: 5311999712668084181}
+  - component: {fileID: -4346538396942367666}
   m_Layer: 11
   m_Name: SoldierTeamB
   m_TagString: B
@@ -33,7 +35,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.675677, y: -0.4056272, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5162, y: 1.5162, z: 1.5162}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -90,30 +92,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-3379521476841943790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6128392919417313016}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 1
-  observableSearch: 2
-  ObservedComponents:
-  - {fileID: -2248641441834345056}
-  - {fileID: 5311999712668084181}
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!114 &-182758008367235385
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,6 +110,27 @@ MonoBehaviour:
   attackRange: 1.5
   teamTag: B
   targetPosition: {fileID: 1062431050517160111, guid: 160758350c20fd84dbee8abc651d5d47, type: 3}
+--- !u!95 &5466783216491108118
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6128392919417313016}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 64e99f06988b5be4484dbf41a7f856d7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &-2248641441834345056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,6 +219,31 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.89872026, y: 0.96602714}
   m_EdgeRadius: 0
+--- !u!114 &-3379521476841943790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6128392919417313016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 1
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: -2248641441834345056}
+  - {fileID: 5311999712668084181}
+  - {fileID: -4346538396942367666}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!114 &5311999712668084181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,3 +260,19 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 0
   m_TeleportEnabled: 1
   m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &-4346538396942367666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6128392919417313016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters: []
+  m_SynchronizeLayers: []
