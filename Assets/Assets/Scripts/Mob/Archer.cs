@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using Photon.Pun;
+using static Photon.Pun.UtilityScripts.PunTeams;
 
 public class Archer : MonoBehaviourPun
 {
@@ -14,11 +15,14 @@ public class Archer : MonoBehaviourPun
     private int battlePhasesParticipated = 0;
     private Animator animator;           // Referencia al componente Animator
 
+    AudioSource clip;
+
     void Start()
     {
         animator = GetComponent<Animator>();
 
         PhotonGameManager.Instance.OnBattlePhaseStart += OnBattlePhaseStart;  // Subscribirse al evento
+        clip = GetComponent<AudioSource>();
     }
 
     void OnDestroy()
@@ -84,6 +88,7 @@ public class Archer : MonoBehaviourPun
         GameObject projectile = PhotonNetwork.Instantiate(projectilePrefab.name, firePoint.position, Quaternion.identity);
         Projectile projectileScript = projectile.GetComponent<Projectile>();
         projectileScript.Initialize(target, teamTag == "A" ? "B" : "A");
+        photonView.RPC("PlaySound", RpcTarget.All);
 
         //canAttack = true;
     }
@@ -106,7 +111,11 @@ public class Archer : MonoBehaviourPun
         }
     }
 
-
+    [PunRPC]
+    private void PlaySound()
+    {
+        clip.Play();
+    }
 
     private void OnDrawGizmosSelected()
     {
