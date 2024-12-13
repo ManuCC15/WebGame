@@ -17,6 +17,8 @@ public class PhotonGameManager : MonoBehaviour
 
     public event Action OnBattlePhaseStart;     // Evento para la fase de batalla
 
+    AudioSource music;
+
     void Awake()
     {
         if (Instance == null)
@@ -27,12 +29,15 @@ public class PhotonGameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        music = GetComponent<AudioSource>();
+        
     }
 
     void Start()
     {
         phaseTimer = preparationPhaseDuration;
         spawnSoldierButton.gameObject.SetActive(false); // Ocultar botón inicialmente
+        
     }
 
     void Update()
@@ -81,6 +86,12 @@ public class PhotonGameManager : MonoBehaviour
     public bool IsPreparationPhase()
     {
         return isPreparationPhase;
+    }
+
+    [PunRPC]
+    private void MusicPlay()
+    {
+        music.Play();
     }
 }
 
