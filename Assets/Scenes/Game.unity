@@ -733,13 +733,8 @@ MonoBehaviour:
   resourceUITextPrefab: {fileID: 9017168964754661531, guid: 435ea46d826519249ad9fbce374f59a5, type: 3}
   phaseTimerText: {fileID: 1055118899}
   soldierCountUITextPrefab: {fileID: 2003125501}
-<<<<<<< Updated upstream
   canvasMensage: {fileID: 929144363}
   canvasWinLose: {fileID: 124457435}
-=======
-  canvasMensage: {fileID: 0}
-  canvasWinLose: {fileID: 0}
->>>>>>> Stashed changes
 --- !u!4 &237304368
 Transform:
   m_ObjectHideFlags: 0
@@ -1370,8 +1365,8 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.6431373, g: 0.6039216, b: 0.6039216, a: 1}
-    m_PressedColor: {r: 0.8301887, g: 0.41901034, b: 0.41901034, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -8809,8 +8804,8 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.6431373, g: 0.6039216, b: 0.6039216, a: 1}
-    m_PressedColor: {r: 0.8301887, g: 0.41901034, b: 0.41901034, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -8827,7 +8822,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 479094000}
+  m_TargetGraphic: {fileID: 1499812939}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -9137,8 +9132,8 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.6431373, g: 0.6039216, b: 0.6039216, a: 1}
-    m_PressedColor: {r: 0.8301887, g: 0.41901034, b: 0.41901034, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
@@ -9155,7 +9150,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 479094000}
+  m_TargetGraphic: {fileID: 1792735427}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -9168,7 +9163,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Loading
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1792735427
