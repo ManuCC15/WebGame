@@ -3,7 +3,7 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
 
-public class PhotonGameManager : MonoBehaviour
+public class PhotonGameManager : MonoBehaviourPun
 {
     public static PhotonGameManager Instance;
 
@@ -37,7 +37,7 @@ public class PhotonGameManager : MonoBehaviour
     {
         phaseTimer = preparationPhaseDuration;
         spawnSoldierButton.gameObject.SetActive(false); // Ocultar botón inicialmente
-        
+        photonView.RPC("MusicPlay", RpcTarget.All);
     }
 
     void Update()
