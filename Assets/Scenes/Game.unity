@@ -733,6 +733,8 @@ MonoBehaviour:
   resourceUITextPrefab: {fileID: 9017168964754661531, guid: 435ea46d826519249ad9fbce374f59a5, type: 3}
   phaseTimerText: {fileID: 1055118899}
   soldierCountUITextPrefab: {fileID: 2003125501}
+  canvasMensage: {fileID: 929144363}
+  canvasWinLose: {fileID: 124457435}
 --- !u!4 &237304368
 Transform:
   m_ObjectHideFlags: 0

@@ -107,6 +107,8 @@ public class Archer : MonoBehaviourPun
 
         if (battlePhasesParticipated >= maxBattlePhases)
         {
+            string team = GetPlayerTeam(); // Implementa GetPlayerTeam() si no existe
+            InteractableObject.ClearArcherReference(team, gameObject);
             PhotonNetwork.Destroy(gameObject);
         }
     }
